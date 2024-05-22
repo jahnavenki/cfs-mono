@@ -1,0 +1,404 @@
+(function (document, $, Coral) {
+ 
+  let $doc = $(document);
+  $doc.on("foundation-contentloaded", function (e) {
+    $(".applicationdetails", e.target).each(function (i, element) {
+      Coral.commons.ready(element, function (component) {
+        $(component).on("change", function (event) {
+          let apiUrl = new URL(location.href).searchParams.get('item') ? new URL(location.href).searchParams.get('item') :  window.location.pathname.split('html')[1];
+          let applicationId = JSON.parse(component.value);
+ 
+          $.ajax({
+              url: apiUrl + '.applicationdetails.json',
+              type: 'GET',
+              data: { familyId: applicationId },
+              dataType: 'json',
+              success: function(responseData) {
+                  console.log(responseData);
+                  let applicationDetails = responseData;
+                  let configJson = {
+                    heading: ["./jcr:title"],
+                    subHeadLine: ["./jcr:description"],
+                    applicationFamilyId: ["./applicationId"],
+                    imageURL: ["./imgURL"],
+                    leadDivision: ["./leadDivision"],
+                    divisionId: ["./divisionId"],
+                    metaDescription: ["./seoDescription"]
+                  };
+                  let applications = Object.keys(configJson);
+                  applications.forEach((application) => {
+                    if (applicationDetails[application] == undefined) {
+                      configJson[application].forEach((inputkey) => {
+                        $('[name="' + inputkey + '"]').prop("value", "");
+ 
+                        if (inputkey == "./imgURL") {
+                          $('input[labelledby="' + $('[name="' + inputkey + '"]').attr("labelledby") + '"]').prop("value", "");
+                        }
+                      });
+                    } else {
+                      configJson[application].forEach((inputkey) => {
+                        $('[name="' + inputkey + '"]').prop("value", applicationDetails[application]);
+ 
+                        if (inputkey == "./jcr:title" && applicationDetails['applicationFamilyName'] != '') {
+                          $('input[name="' + inputkey + '"]').trigger("change");
+                        }
+ 
+                        if (inputkey == "./imgURL") {
+                          $('input[labelledby="' + $('[name="' + inputkey + '"]').attr("labelledby") + '"]').prop("value", applicationDetails[application]);
+                        }
+                      });
+                    }
+                  });
+ 
+                  $("[name='./applicationId']").attr("readonly", true);
+                  $("[name='./leadDivision']").attr("readonly", true);
+                  $("[name='./divisionId']").attr("readonly", true);
+          if(responseData?.heading) {
+                                document.querySelectorAll("[type='submit']")[0].removeAttribute('disabled');
+                            } else {
+                                document.querySelectorAll("[type='submit']")[0].setAttribute('disabled', 'disabled');
+                            }
+                  setTimeout(function() {
+                        $('[name="./metadata/applicationtag/cq:tags"]').find("input").focus();
+                  }, 10);
+              },
+              error: function(error) {
+                  console.error('Error:', error);
+              }
+          });
+        });
+        $(".applicationdetails").trigger("change");
+      });
+    });
+  });
+})(document, Granite.$, Coral);
+.........................................................................................
+package com.ifx.core.pojos.design;
+ 
+import java.util.Collections;
+import java.util.List;
+ 
+public class DesignFamily {
+ 
+	private String productFamilyId;
+	private String productFamilyName;
+	private String hierarchicalOrderNumber;
+	private String subtitle;
+	private String shortTitle;
+	private String imageURL;
+	private String aemTag;
+	private String heading;
+	private String subHeadLine;
+	private String metaDescription;
+	private String overview;
+	private String features;
+	private String benefits;
+	private String leadPL;
+	private String leadDivision;
+	private String divisionId;
+	private String pageURL;
+	private String gettingStarted;
+ 
+	public String getPageURL() {
+		return pageURL;
+	}
+ 
+	public void setPageURL(String pageURL) {
+		this.pageURL = pageURL;
+	}
+ 
+	public String getGettingStarted() {
+		return gettingStarted;
+	}
+ 
+	public void setGettingStarted(String gettingStarted) {
+		this.gettingStarted = gettingStarted;
+	}
+ 
+ 
+	public String getProductFamilyId() {
+		return productFamilyId;
+	}
+ 
+	public void setProductFamilyId(String productFamilyId) {
+		this.productFamilyId = productFamilyId;
+	}
+ 
+	public String getProductFamilyName() {
+		return productFamilyName;
+	}
+ 
+	public void setProductFamilyName(String productFamilyName) {
+		this.productFamilyName = productFamilyName;
+	}
+ 
+	public String getSubtitle() {
+		return subtitle;
+	}
+ 
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
+ 
+	public String getShortTitle() {
+		return shortTitle;
+	}
+ 
+	public String getLeadPL() {
+		return leadPL;
+	}
+ 
+	public void setLeadPL(String leadPL) {
+		this.leadPL = leadPL;
+	}
+ 
+	public String getLeadDivision() {
+		return leadDivision;
+	}
+ 
+	public void setLeadDivision(String leadDivision) {
+		this.leadDivision = leadDivision;
+	}
+ 
+	public String getDivisionId() {
+		return divisionId;
+	}
+ 
+	public void setDivisionId(String divisionId) {
+		this.divisionId = divisionId;
+	}
+ 
+	public void setShortTitle(String shortTitle) {
+		this.shortTitle = shortTitle;
+	}
+ 
+	public String getImageURL() {
+		return imageURL;
+	}
+ 
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+ 
+	public String getAemTag() {
+		return aemTag;
+	}
+ 
+	public void setAemTag(String aemTag) {
+		this.aemTag = aemTag;
+	}
+ 
+	public String getHeading() {
+		return heading;
+	}
+ 
+	public void setHeading(String heading) {
+		this.heading = heading;
+	}
+ 
+	public String getSubHeadLine() {
+		return subHeadLine;
+	}
+ 
+	public void setSubHeadLine(String subHeadLine) {
+		this.subHeadLine = subHeadLine;
+	}
+ 
+	public String getMetaDescription() {
+		return metaDescription;
+	}
+ 
+	public void setMetaDescription(String metaDescription) {
+		this.metaDescription = metaDescription;
+	}
+ 
+	public String getOverview() {
+		return overview;
+	}
+ 
+	public void setOverview(String overview) {
+		this.overview = overview;
+	}
+ 
+	public String getFeatures() {
+		return features;
+	}
+ 
+	public void setFeatures(String features) {
+		this.features = features;
+	}
+ 
+	public String getBenefits() {
+		return benefits;
+	}
+ 
+	public void setBenefits(String benefits) {
+		this.benefits = benefits;
+	}
+	private List<String> listofLinks;
+ 
+	private List<DesignFamily> childFamilies;
+ 
+	public List<DesignFamily> getChildFamilies() {
+		if (null != childFamilies) {
+			return Collections.unmodifiableList(childFamilies);
+		} else {
+			return Collections.emptyList();
+		}
+	}
+ 
+	public void setChildFamilies(List<DesignFamily> childFamilies) {
+		if (null != childFamilies) {
+			this.childFamilies = Collections.unmodifiableList(childFamilies);
+		} else {
+			this.childFamilies = Collections.emptyList();
+		}
+	}
+ 
+	public String getHierarchicalOrderNumber() {
+		return hierarchicalOrderNumber;
+	}
+ 
+	public void setHierarchicalOrderNumber(String hierarchicalOrderNumber) {
+		this.hierarchicalOrderNumber = hierarchicalOrderNumber;
+	}
+ 
+	public List<String> getListofLinks() {
+		return listofLinks;
+	}
+ 
+	public void setListofLinks(List<String> listofLinks) {
+		this.listofLinks = listofLinks;
+	}
+}
+.................................................................................................
+package com.ifx.core.services.design;
+ 
+import java.util.Optional;
+ 
+import com.ifx.core.pojos.design.DesignFamily;
+ 
+public interface DesignService {
+ 
+	public DesignFamily[] getDesignFamilies(Optional<String> language);
+	public DesignFamily[] getDesignFamilies(Optional<String> language,String designSupportId);
+}
+.............................................................................
+package com.ifx.core.services.design.impl;
+ 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+ 
+import com.ifx.core.services.common.myifx.ResourceOwnerTokenService;
+import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+ 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.ifx.core.pojos.design.DesignFamily;
+import com.ifx.core.services.api.ApiGatewayService;
+import com.ifx.core.services.design.DesignService;
+import com.ifx.core.utils.Constants;
+import com.ifx.core.utils.PageUtil;
+ 
+@Component(service = DesignService.class, immediate = true)
+public class DesignServiceImpl implements DesignService {
+ 
+	private static final Logger LOGGER = LoggerFactory.getLogger(DesignServiceImpl.class);
+ 
+	@Reference
+	private ResourceResolverFactory resolverFactory;
+	@Reference
+	private ResourceOwnerTokenService resourceOwnerTokenService;
+ 
+ 
+	@Reference
+	private ApiGatewayService apiGatewayService;
+ 
+	/**
+	 * Get array of ProductFamily. It will fetch data through IPMS API In case of
+	 * any error, it will return null value
+	 * 
+	 * @param language
+	 * @return
+	 */
+	@Override
+	public DesignFamily[] getDesignFamilies(Optional<String> language) {
+ 
+		Map<String, String> queryParameters = new HashMap<>();
+		LOGGER.debug("getDesignFamilies(language): start");
+		queryParameters.put(Constants.LANGUAGE, getLanguage(language));
+		return getDesignDetails(queryParameters);
+	}
+ 
+	// Overloading the method to get product subfamilies for product ID
+	public DesignFamily[] getDesignFamilies(Optional<String> language, String productFamilyId) {
+ 
+		Map<String, String> queryParameters = new HashMap<>();
+		queryParameters.put(Constants.LANGUAGE, getLanguage(language));
+		queryParameters.put(Constants.FAMILY_ID, String.valueOf(productFamilyId));
+		return getDesignDetails(queryParameters);
+	}
+ 
+	private DesignFamily[] getDesignDetails(Map<String, String> queryParameter) {
+		DesignFamily[] designFamilies = new DesignFamily[0];
+		String url;
+		String langCode = queryParameter.get(Constants.LANGUAGE);
+		if(langCode.equalsIgnoreCase(Constants.JA) || langCode.equalsIgnoreCase(Constants.ZH)) {
+		 url = PageUtil.replaceLanguageCode(apiGatewayService.getDesignFamilyApi(queryParameter));
+		}else {
+			url = apiGatewayService.getDesignFamilyApi(queryParameter);
+		}
+		try {
+			HttpRequest request = resourceOwnerTokenService.getHttpRequest().uri(new URI(url)).GET().build();
+			HttpResponse<String> response = HttpClient.newBuilder()
+					.connectTimeout(Duration.ofMillis(apiGatewayService.getTimeout())).build()
+					.send(request, HttpResponse.BodyHandlers.ofString());
+			String responseJSONStr = response.body();
+			if (response.statusCode() == 200) {
+				return getDesignFamilies(responseJSONStr);
+			}
+		}  catch (URISyntaxException | InterruptedException | IOException e) {
+			LOGGER.error("getProductDetails(): IO exception occured", e);
+		}
+		return designFamilies;
+	}
+ 
+	private DesignFamily[] getDesignFamilies(String responseJSONStr) {
+		DesignFamily[] designFamilies = new DesignFamily[0];
+		Gson gson = new Gson();
+		try {
+			designFamilies = gson.fromJson(responseJSONStr, DesignFamily[].class);
+		} catch (JsonSyntaxException e) {
+			LOGGER.error("getDesignDetails(): JSON syntax exception occured", e);
+		}
+		return designFamilies;
+	}
+ 
+	/**
+	 * To get Language if present else will use default language provided in Product
+	 * Service configuration
+	 * 
+	 * @param language
+	 * @return
+	 */
+	private String getLanguage(Optional<String> language) {
+		if (language.isPresent()) {
+			return language.get();
+		} else {
+			return Constants.DEFAULT_LANGUAGE_EN;
+		}
+	}
+ 
+}
