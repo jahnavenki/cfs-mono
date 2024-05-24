@@ -1,3 +1,19 @@
+package au.com.cfs.winged.core.impl;
+
+import au.com.cfs.winged.core.config.ApiGatewayService;
+import au.com.cfs.winged.core.models.common.CardFundAPIConstants;
+import au.com.cfs.winged.core.models.pojo.CardFundFamily;
+import au.com.cfs.winged.core.services.CardFundService;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import au.com.cfs.winged.core.models.common.ResourceOwnerTokenService;
+import org.apache.abdera.util.Constants;
+import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -7,25 +23,10 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-import com.ifx.core.pojos.design.DesignFamily;
-import com.ifx.core.services.api.ApiGatewayService;
-import com.ifx.core.services.common.myifx.ResourceOwnerTokenService;
-import com.ifx.core.services.design.DesignService;
-import com.ifx.core.utils.Constants;
-import com.ifx.core.utils.PageUtil;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
-import org.apache.sling.api.resource.ResourceResolverFactory;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-@Component(service = CarFundService.class, immediate = true)
-public class CarFundServiceImpl implements CarFundService {
+@Component(service = CardFundService.class, immediate = true)
+public class CarFundServiceImpl implements CardFundService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CarFundServiceImpl.class);
 
@@ -39,11 +40,10 @@ public class CarFundServiceImpl implements CarFundService {
     private ApiGatewayService apiGatewayService;
 
     @Override
-    public CarFund[] getCarFunds(Optional<String> productId) {
+    public CardFundFamily[]getCardFundFamilies() {
         Map<String, String> queryParameters = new HashMap<>();
-        queryParameters.put(Constants.COMPANY_CODE, APIConstants.COMPANY_CODE);
-        queryParameters.put(Constants.MAIN_GROUP, APIConstants.MAIN_GROUP);
-        queryParameters.put(Constants.PRODUCT_ID, productId.orElse(APIConstants.PRODUCT_ID));
+        queryParameters.put(Constants.COMPANY_CODE, CardFundAPIConstants.COMPANY_CODE);
+        queryParameters.put(Constants.MAIN_GROUP, CardFundAPIConstants.MAIN_GROUP);
         queryParameters.put(Constants.CATEGORY, "Conservative");
         queryParameters.put(Constants.CATEGORY, "Defensive");
         queryParameters.put(Constants.CATEGORY, "Geared");
@@ -76,8 +76,8 @@ public class CarFundServiceImpl implements CarFundService {
         return getCarFundDetails(queryParameters);
     }
 
-    private CarFund[] getCarFundDetails(Map<String, String> queryParameter) {
-        CarFund[] carFunds = new CarFund[0];
+    private CardFundFamily[] getCarFundDetails(Map<String, String> queryParameter) {
+        CardFundFamily[] cardFundFamily = new CardFundFamily[0];
         String url = constructCarFundApiUrl(queryParameter);
 
         try {
@@ -92,12 +92,12 @@ public class CarFundServiceImpl implements CarFundService {
         } catch (URISyntaxException | InterruptedException | IOException e) {
             LOGGER.error("getCarFundDetails(): Exception occurred", e);
         }
-        return carFunds;
+        return cardFundFamily;
     }
 
     private String constructCarFundApiUrl(Map<String, String> queryParameters) {
         StringBuilder urlBuilder = new StringBuilder();
-        urlBuilder.append(APIConstants.BASE_URL);
+        urlBuilder.append(CardFundAPIConstants.BASE_URL);
 
         boolean isFirstParam = true;
         for (Map.Entry<String, String> entry : queryParameters.entrySet()) {
@@ -112,13 +112,15 @@ public class CarFundServiceImpl implements CarFundService {
         return urlBuilder.toString();
     }
 
-    private CarFund[] parseCarFunds(String responseJSONStr) {
+    private CardFundFamily[] parseCarFunds(String responseJSONStr) {
         Gson gson = new Gson();
         try {
-            return gson.fromJson(responseJSONStr, CarFund[].class);
+            return gson.fromJson(responseJSONStr, CardFundFamily[].class);
         } catch (JsonSyntaxException e) {
             LOGGER.error("parseCarFunds(): JSON syntax exception occurred", e);
         }
-        return new CarFund[0];
+        return new CardFundFamily[0];
     }
 }
+
+
