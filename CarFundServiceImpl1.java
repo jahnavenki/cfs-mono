@@ -7,8 +7,6 @@ import au.com.cfs.winged.core.services.CardFundService;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import au.com.cfs.winged.core.models.common.ResourceOwnerTokenService;
-import org.apache.abdera.util.Constants;
-import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
@@ -40,38 +38,38 @@ public class CarFundServiceImpl implements CardFundService {
     private ApiGatewayService apiGatewayService;
 
     @Override
-    public CardFundFamily[]getCardFundFamilies() {
+    public CardFundFamily[] getCardFundFamilies() {
         Map<String, String> queryParameters = new HashMap<>();
-        queryParameters.put(Constants.COMPANY_CODE, CardFundAPIConstants.COMPANY_CODE);
-        queryParameters.put(Constants.MAIN_GROUP, CardFundAPIConstants.MAIN_GROUP);
-        queryParameters.put(Constants.CATEGORY, "Conservative");
-        queryParameters.put(Constants.CATEGORY, "Defensive");
-        queryParameters.put(Constants.CATEGORY, "Geared");
-        queryParameters.put(Constants.CATEGORY, "Growth");
-        queryParameters.put(Constants.CATEGORY, "High Growth");
-        queryParameters.put(Constants.CATEGORY, "Moderate");
-        queryParameters.put(Constants.CATEGORY, "Single sector option");
-        queryParameters.put(Constants.ASSET, "");
-        queryParameters.put(Constants.ASSET, "Alternatives");
-        queryParameters.put(Constants.ASSET, "Australian Property Securities");
-        queryParameters.put(Constants.ASSET, "Australian Share");
-        queryParameters.put(Constants.ASSET, "Cash and other income");
-        queryParameters.put(Constants.ASSET, "Fixed Interest");
-        queryParameters.put(Constants.ASSET, "Global Property Securities");
-        queryParameters.put(Constants.ASSET, "Global Share");
-        queryParameters.put(Constants.ASSET, "Infrastructure securities");
-        queryParameters.put(Constants.ASSET, "Multi-Sector");
-        queryParameters.put(Constants.RISK, "1");
-        queryParameters.put(Constants.RISK, "3");
-        queryParameters.put(Constants.RISK, "4");
-        queryParameters.put(Constants.RISK, "5");
-        queryParameters.put(Constants.RISK, "6");
-        queryParameters.put(Constants.RISK, "7");
-        queryParameters.put(Constants.MIN_TIME_FRAME, "At least 10 years");
-        queryParameters.put(Constants.MIN_TIME_FRAME, "At Least 3 years");
-        queryParameters.put(Constants.MIN_TIME_FRAME, "At least 5 years");
-        queryParameters.put(Constants.MIN_TIME_FRAME, "At least 7 years");
-        queryParameters.put(Constants.MIN_TIME_FRAME, "No minimum");
+        queryParameters.put("companyCode", CardFundAPIConstants.COMPANY_CODE);
+        queryParameters.put("mainGroup", CardFundAPIConstants.MAIN_GROUP);
+        queryParameters.put("category", "Conservative");
+        queryParameters.put("category", "Defensive");
+        queryParameters.put("category", "Geared");
+        queryParameters.put("category", "Growth");
+        queryParameters.put("category", "High Growth");
+        queryParameters.put("category", "Moderate");
+        queryParameters.put("category", "Single sector option");
+        queryParameters.put("asset", "");
+        queryParameters.put("asset", "Alternatives");
+        queryParameters.put("asset", "Australian Property Securities");
+        queryParameters.put("asset", "Australian Share");
+        queryParameters.put("asset", "Cash and other income");
+        queryParameters.put("asset", "Fixed Interest");
+        queryParameters.put("asset", "Global Property Securities");
+        queryParameters.put("asset", "Global Share");
+        queryParameters.put("asset", "Infrastructure securities");
+        queryParameters.put("asset", "Multi-Sector");
+        queryParameters.put("risk", "1");
+        queryParameters.put("risk", "3");
+        queryParameters.put("risk", "4");
+        queryParameters.put("risk", "5");
+        queryParameters.put("risk", "6");
+        queryParameters.put("risk", "7");
+        queryParameters.put("minTimeFrame", "At least 10 years");
+        queryParameters.put("minTimeFrame", "At Least 3 years");
+        queryParameters.put("minTimeFrame", "At least 5 years");
+        queryParameters.put("minTimeFrame", "At least 7 years");
+        queryParameters.put("minTimeFrame", "No minimum");
 
         return getCarFundDetails(queryParameters);
     }
@@ -122,5 +120,3 @@ public class CarFundServiceImpl implements CardFundService {
         return new CardFundFamily[0];
     }
 }
-
-
