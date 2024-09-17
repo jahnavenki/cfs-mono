@@ -1,0 +1,285 @@
+package au.com.cfs.winged.core.models;
+
+import au.com.cfs.winged.core.common.constants.ApplicationConstants;
+import au.com.cfs.winged.core.models.common.CardModel;
+import au.com.cfs.winged.core.util.FormatterUtils;
+import au.com.cfs.winged.core.util.ListUtils;
+import au.com.cfs.winged.core.util.ObjectUtils;
+import au.com.cfs.winged.core.util.PageUtils;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.*;
+import org.apache.sling.models.annotations.DefaultInjectionStrategy;
+import org.apache.sling.models.annotations.Model;
+
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.*;
+
+@Model(
+		adaptables = SlingHttpServletRequest.class,
+		adapters = CardGridContainerModel.class,
+		defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL
+)
+public class CardGridContainerModel extends CardModel {
+	protected static final Logger LOG = LoggerFactory.getLogger(CardGridContainerModel.class);
+
+	private String uuid;
+
+	@ValueMapValue
+	private String contentType;
+
+	@ValueMapValue
+	private String contentContainerNode;
+
+	@ValueMapValue
+	private String sortBy;
+
+	@ValueMapValue
+	private String enablePagination;
+
+	@ValueMapValue
+	private String paginationType;
+
+	@ValueMapValue
+	private Integer itemsPerPage;
+
+	@ValueMapValue
+	private String firstItemHero;
+
+	@ValueMapValue
+	private String cardType;
+
+  @Inject
+  private ResourceResolver resourceResolver;
+
+	private double totalPages = 1;
+  
+	private List<Map<String, Object>> cardItems = new ArrayList<>();
+
+	@PostConstruct
+	public void initModel() {
+    this.setCardItems();
+    this.setUuid();
+    this.setItemsPerPage();
+    this.setTotalPages();
+	}
+
+  public String getUuid() {
+		return uuid;
+	}
+  public String getContentType() {
+		return contentType;
+	}
+  public String getContentContainerNode() {
+		return contentContainerNode;
+	}
+  public String getSortBy() {
+		return sortBy;
+	}
+  public String getEnablePagination() {
+		return enablePagination;
+	}
+  public String getPaginationType() {
+		return paginationType;
+	}
+  public Integer getItemsPerPage() {
+		return itemsPerPage;
+	}
+  public String getFirstItemHero() {
+		return firstItemHero;
+	}
+  public String getCardType() {
+		return cardType;
+	}
+  public double getTotalPages() {
+    return this.totalPages;
+  }
+	public List<Map<String, Object>> getCardItems() {
+		return cardItems;
+	}
+	public String getJsonPayload() {
+    return cardItems.size() > 0 
+      ? ObjectUtils.objectToJsonString(cardItems)
+      : StringUtils.EMPTY;
+	}
+
+  public void setTotalPages() {
+    this.totalPages = cardItems.size() > 0
+     ? Math.ceil((double)cardItems.size() / (itemsPerPage + 1))
+     : 0;
+  }
+  public void setItemsPerPage() {
+    // HTL templates don't actually render the amount of items specified, so need to decrease by 1.
+    if (firstItemHero == null && itemsPerPage != null) {
+			itemsPerPage--;
+		}
+  }
+
+  /**
+   * Modifies the first map in the list to have a 'layout' property set to 'horizontal' if the instance variable 'firstItemHero' is set to 'true'.
+   * This method is used to change the layout of the first card in the list to a hero layout, if required.
+   * If the list is empty or the 'firstItemHero' is not set to 'true', no modifications are made.
+   *
+   * @param list The list of maps representing card entries, where the first map's layout might need to be set to 'horizontal'.
+   * @return The modified list with the first map's 'layout' property set to 'horizontal' if the conditions are met, or the original list if not.
+   */
+  private List<Map<String, Object>> setCardHero(List<Map<String, Object>> list) {
+    if (!list.isEmpty()) {
+      Map<String, Object> firstItem = list.get(0);
+
+      if (firstItemHero != null && firstItemHero.equals("true")) {
+        firstItem.put("layout", "horizontal");
+      }
+    }
+
+    return list;
+  }
+
+  /**
+   * Creates a dynamic card entry given a page resource and a child resource.
+   * 
+   * @param pageResource the page resource to create a dynamic card entry from
+   * @param childResource the child resource to create a dynamic card entry from
+   * @return a map containing the properties of the dynamic card entry
+   */
+  private Map<String, Object> createDynamicCardEntry(
+    Resource pageResource,
+    Resource childResource
+  ) {
+    Map<String, Object> itemMap = new HashMap<>();
+    Map<String, String> metadataMap = new HashMap<>();
+
+    // These properties should match the properties of a "Card - Article (Editorial Card)" component.
+    if(Objects.nonNull(pageResource)) {
+      ValueMap properties = pageResource.getValueMap();
+
+      // Metadata properties
+      metadataMap.put(
+        ApplicationConstants.DATE,
+        FormatterUtils.formatDateToHuman(
+          properties.get(ApplicationConstants.PUBLISH_DATE, String.class),
+          ApplicationConstants.DATE_FORMAT_DD_MMM_YYYY
+        )
+      );
+      metadataMap.put(ApplicationConstants.READING_TIME, properties.get(ApplicationConstants.READING_TIME, String.class));
+      metadataMap.put(ApplicationConstants.TAG, PageUtils.getFirstTagTitle(resourceResolver, pageResource));
+      itemMap.put(ApplicationConstants.METADATA, metadataMap);
+      
+      // Top level properties
+      itemMap.put(ApplicationConstants.LAYOUT, "vertical");
+      itemMap.put(ApplicationConstants.HEADING, properties.get(ApplicationConstants.JCR_TITLE, String.class));
+      itemMap.put(ApplicationConstants.HEADING_LINK, PageUtils.getRelativePageUrl(pageResource));
+      itemMap.put(ApplicationConstants.DESCRIPTION, properties.get(ApplicationConstants.JCR_DESCRIPTION, String.class));
+      itemMap.put(ApplicationConstants.IMAGE_URL, PageUtils.getFeaturedImagePath(pageResource));
+      itemMap.put(ApplicationConstants.MEDIA_TYPE, "image");
+    }
+    
+    return itemMap;
+  }
+
+  /**
+   * Sorts a list of maps representing dynamic card entries based on the instance variable 'sortBy'.
+   * This method uses utility methods from the ListUtils class for sorting.
+   * If the 'sortBy' value doesn't match any supported sorting criteria, the original list is returned.
+   *
+   * Supported sorting criteria:
+   * - "alphabetical": Sorts the list alphabetically by the 'HEADING' property.
+   * - "newest": Sorts the list by the 'DATE' property in descending order (newest first).
+   *
+   * @param list The list of maps to be sorted.
+   * @return The sorted list of maps based on the specified sorting criteria, or the original list if the criteria is not supported.
+   */
+  private List<Map<String, Object>> sortDynamicCardEntries(List<Map<String, Object>> list) {
+    if (sortBy.equals("alphabetical")) {
+      return ListUtils.sortListAlphabetically(list, ApplicationConstants.HEADING);
+    }
+
+    if (sortBy.equals("newest")) {
+      return ListUtils.sortListNewest(list, "metadata", ApplicationConstants.DATE);
+    }
+
+    return list;
+  }
+
+  /**
+   * Creates a list of dynamic card entries from the content container node.
+   * 
+   * @return a list of maps containing the properties of the dynamic card entries, or null if there are no dynamic card entries
+   */
+  private List<Map<String, Object>> createDynamicCardEntries() {
+    try {
+      // Exit early
+      if (resourceResolver == null) {
+        LOG.error("Content Fragment ERROR : Resource Resolver is NULL");
+        return null;
+      }
+
+      Resource contentResource = resourceResolver.getResource(contentContainerNode);
+
+      // Exit early
+      if(Objects.isNull(contentResource)) {
+        return null;
+      }
+
+      List<Map<String, Object>> dynamicCardList = new ArrayList<>();
+      Iterator<Resource> childrenResourceIterator = contentResource.listChildren();
+
+      while (childrenResourceIterator.hasNext()) {
+        Resource childResource = childrenResourceIterator.next();
+        Resource pageResource = resourceResolver.getResource(childResource.getPath() + "/" + ApplicationConstants.JCR_CONTENT);
+
+        if (pageResource != null && childResource != null) {
+          Map<String, Object> dynamicCard = this.createDynamicCardEntry(pageResource, childResource);
+          dynamicCardList.add(dynamicCard);
+        }
+      }
+
+      return dynamicCardList;
+    } catch (Exception e) {
+      LOG.error("\n ERROR while resolving dynamic pages {} ", e);
+    }
+
+    return null;
+	}
+  
+  /**
+   * Sets the card items based on the content type and card type.
+   */
+  public void setCardItems() {
+    if(StringUtils.isBlank(contentType)) {
+      return;
+    }
+    
+    if(contentType.equals(ApplicationConstants.CARD_MODE_DYNAMIC) && StringUtils.isNotBlank(contentContainerNode)) {
+      cardItems = sortDynamicCardEntries(
+        createDynamicCardEntries()
+      );
+    } else if(contentType.equals(ApplicationConstants.CARD_MODE_MANUAL)) {
+      if (cardType.equals(ApplicationConstants.EDITORIAL_CARDS_TYPE)) {
+        cardItems = super.getEditorialCards();
+      } else if (cardType.equals(ApplicationConstants.LEFT_CARDS_TYPE)) {
+        cardItems = super.getLeftCards();
+      } else if (cardType.equals(ApplicationConstants.CENTER_CARDS_TYPE)) {
+        cardItems = super.getCenterCards();
+      }
+    }
+
+    if (cardItems.size() > 0) {
+      cardItems = setCardHero(cardItems);
+    }
+  }
+
+  /**
+   * Sets the UUID.
+   */
+  public void setUuid() {
+    UUID uuidObj = UUID.randomUUID();
+    uuid = uuidObj.toString();
+  }
+}
