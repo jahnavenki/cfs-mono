@@ -1,0 +1,89 @@
+package au.com.cfs.winged.servlets;
+
+
+import au.com.cfs.winged.helpers.PageTemplateHelper;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.servlets.HttpConstants;
+import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.osgi.framework.Constants;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+@Component(
+        service= Servlet.class,
+        property=
+                {
+                        Constants.SERVICE_DESCRIPTION + "=Robots Servlet",
+                        "sling.servlet.methods=" + HttpConstants.METHOD_GET,
+                        "sling.servlet.extensions=" + "{txt}",
+                        "sling.servlet.paths=" + "/bin/cfs/robots"
+                }
+)
+public class RobotsServlet extends SlingAllMethodsServlet {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(RobotsServlet.class);
+
+  private static final long serialVersionUID = 2598426539166789515L;
+  
+  private static final String TEMPLATE_NAME = "robots-template";
+
+  @Reference
+  private PageTemplateHelper robotsHelper;
+
+  @Override
+  protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
+    LOGGER.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> -------- GENERATE ROBOTS FILE ");
+    process(request, response);
+  }
+
+  @Override
+  protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException, ServletException {
+    LOGGER.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> -------- GENERATE ROBOTS FILE");
+    process(request, response);
+  }
+
+  public void process(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
+    response.setContentType("text/plain;charset=UTF-8");
+    response.setCharacterEncoding("UTF-8");
+    PrintWriter out = response.getWriter();
+
+    String content = null;
+    if (request.getMethod().equalsIgnoreCase(HttpConstants.METHOD_GET)) {
+      try{
+        response.setStatus(HttpServletResponse.SC_OK);
+        if(robotsHelper != null){
+          content = robotsHelper.getTemplateContent(request,TEMPLATE_NAME);
+        }else{
+          LOGGER.error("ERROR: " + "RobotsHelper is null");
+        }
+      }catch (Exception e){
+        LOGGER.error("ERROR: " + e.getMessage());
+      }
+    }else {
+      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+      responseHttpMethod(response, out, request.getMethod());
+    }
+
+    if( StringUtils.isNotBlank(content)){
+      out.write(content);
+    }
+    out.flush();
+  }
+
+  private void responseHttpMethod(SlingHttpServletResponse response, PrintWriter out, String requestMethod){
+    LOGGER.error(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> -------- HTTP Status 405 - HTTP method " + requestMethod + " is not supported by this URL");
+    response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    out.write("HTTP Status 405 - HTTP method " + requestMethod + " is not supported by this URL");
+    return;
+  }
+}
