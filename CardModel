@@ -1,0 +1,269 @@
+package au.com.cfs.winged.core.models.common;
+
+import au.com.cfs.winged.core.common.constants.ApplicationConstants;
+import au.com.cfs.winged.core.models.pojo.Card;
+import au.com.cfs.winged.core.models.pojo.Cta;
+import au.com.cfs.winged.core.util.FormatterUtils;
+import au.com.cfs.winged.core.util.ObjectUtils;
+import au.com.cfs.winged.helpers.LinkUtil;
+
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class CardModel {
+
+	protected static final Logger LOG = LoggerFactory.getLogger(CardModel.class);
+
+	@SlingObject
+	protected Resource componentResource;
+
+	@ValueMapValue
+	protected String cardType;
+
+	/**
+	 * The method to process the multi Editorial Cards
+	 * @return List
+	 */
+	public List<Map<String, Object>> getEditorialCards() {
+		List<Map<String, Object>> editorialCards = new ArrayList<>();
+		try {
+			if (componentResource != null ) {
+				Resource items = componentResource.getChild(ApplicationConstants.EDITORIAL_CARDS_TYPE);
+				if (items != null) {
+					for (Resource item : items.getChildren()) {
+
+						Map<String, Object> itemMap = new HashMap<>();
+            Map<String, String> metadataMap = new HashMap<>();
+            String date = FormatterUtils.formatDateToHuman(
+              item.getValueMap().get(ApplicationConstants.DATE, String.class),
+              ApplicationConstants.DATE_FORMAT_DD_MMM_YYYY
+            );
+
+            String headingLink = LinkUtil.getMappedURL(
+              item.getValueMap().get(ApplicationConstants.HEADING_LINK, String.class),
+              componentResource.getResourceResolver()
+            );
+            
+
+            // Metadata properties
+            metadataMap.put(ApplicationConstants.DATE, date);
+						metadataMap.put(ApplicationConstants.READING_TIME, item.getValueMap().get(ApplicationConstants.READING_TIME, String.class));
+						metadataMap.put(ApplicationConstants.TAG, item.getValueMap().get(ApplicationConstants.TAG, String.class));
+            itemMap.put(ApplicationConstants.METADATA, metadataMap);
+
+            // Top level properties
+            String layout = item.getValueMap().get(ApplicationConstants.LAYOUT, String.class);
+						itemMap.put(ApplicationConstants.LAYOUT, layout != null ? layout : "vertical");
+						itemMap.put(ApplicationConstants.HEADING, item.getValueMap().get(ApplicationConstants.HEADING, String.class));
+						itemMap.put(ApplicationConstants.HEADING_LINK, headingLink);
+
+						itemMap.put(ApplicationConstants.DESCRIPTION, item.getValueMap().get(ApplicationConstants.DESCRIPTION, String.class));
+            itemMap.put(ApplicationConstants.MEDIA_TYPE, item.getValueMap().get(ApplicationConstants.MEDIA_TYPE, String.class));
+						itemMap.put(ApplicationConstants.IMAGE_URL, item.getValueMap().get(ApplicationConstants.IMAGE_URL, String.class));
+						itemMap.put(ApplicationConstants.ICON_URL, item.getValueMap().get(ApplicationConstants.ICON_URL, String.class));
+						itemMap.put(ApplicationConstants.VIDEO_URL, item.getValueMap().get(ApplicationConstants.VIDEO_URL, String.class));
+						editorialCards.add(itemMap);
+					}
+				}
+			}
+		}catch (Exception e){
+			LOG.error("\n ERROR while getting Editorial Cards Details {} ",e.getMessage());
+		}
+		return editorialCards;
+	}
+
+	/**
+	 * The method to process the multi Awards Cards
+	 * @return List
+	 */
+	public List<Map<String, Object>> getAwardCards() {
+		List<Map<String, Object>> awardCards = new ArrayList<>();
+		try {
+			if (componentResource != null ) {
+				Resource items = componentResource.getChild(ApplicationConstants.AWARDS_CARDS_TYPE);
+				if (items != null) {
+					for (Resource item : items.getChildren()) {
+						Map<String, Object> itemMap = new HashMap<>();
+						itemMap.put(ApplicationConstants.HEADING, item.getValueMap().get(ApplicationConstants.HEADING, String.class));
+						itemMap.put(ApplicationConstants.CONTENT, item.getValueMap().get(ApplicationConstants.CONTENT, String.class));
+						itemMap.put(ApplicationConstants.IMAGE_URL, item.getValueMap().get(ApplicationConstants.IMAGE_URL, String.class));
+
+						awardCards.add(itemMap);
+					}
+				}
+			}
+		}catch (Exception e){
+			LOG.error("\n ERROR while getting Awards Cards Details {} ",e.getMessage());
+		}
+		return awardCards;
+	}
+
+	/**
+	 * The method to process the multi Center Cards
+	 * @return List
+	 */
+	public List<Map<String, Object>> getCenterCards() {
+		List<Map<String, Object>> cards = new ArrayList<>();
+
+		try {
+			if (componentResource != null ) {
+				Resource items = componentResource.getChild(ApplicationConstants.CENTER_CARDS_TYPE);
+				if (items != null) {
+					for (Resource item : items.getChildren()) {
+            Card centerCard = new Card(
+								item.getValueMap().get(ApplicationConstants.IMAGE_URL, String.class),
+								"",
+								"",
+								item.getValueMap().get(ApplicationConstants.HEADING, String.class),
+								item.getValueMap().get(ApplicationConstants.CONTENT, String.class)
+						);
+
+            String headingLink = LinkUtil.getMappedURL(
+              item.getValueMap().get(ApplicationConstants.HEADING_LINK, String.class),
+              componentResource.getResourceResolver()
+            );
+
+						centerCard.setLayout(item.getValueMap().get(ApplicationConstants.LAYOUT, String.class));
+						centerCard.setHeadingLink(headingLink);
+            List<Cta> ctas = ButtonsModel.getTypedCtas(item);
+            centerCard.setCtas(ctas);
+						cards.add(ObjectUtils.objectToObjectPropertiesMap(centerCard));
+					}
+				}
+			}
+		}catch (Exception e){
+			LOG.error("\n ERROR while getting Center Cards Details {} ",e.getMessage());
+		}
+		return cards;
+	}
+
+	/**
+	 * The method to process the multi Fund Cards
+	 * @return List
+	 */
+	public List<Map<String, Object>> getFundCards() {
+		List<Map<String, Object>> fundCards = new ArrayList<>();
+		try {
+			if (componentResource != null ) {
+				Resource items = componentResource.getChild(ApplicationConstants.FUND_CARDS_TYPE);
+				if (items != null) {
+					for (Resource item : items.getChildren()) {
+						Map<String, Object> itemMap = new HashMap<>();
+            String headingLink = LinkUtil.getMappedURL(
+              item.getValueMap().get(ApplicationConstants.HEADING_LINK, String.class),
+              componentResource.getResourceResolver()
+            );
+
+						itemMap.put(ApplicationConstants.HEADING, item.getValueMap().get(ApplicationConstants.HEADING, String.class));
+            itemMap.put(ApplicationConstants.HEADING_LINK, headingLink);
+						itemMap.put(ApplicationConstants.SUPER_HEADING, item.getValueMap().get(ApplicationConstants.SUPER_HEADING, String.class));
+						itemMap.put(ApplicationConstants.CONTENT, item.getValueMap().get(ApplicationConstants.CONTENT, String.class));
+						itemMap.put(ApplicationConstants.CARD_SIZE, item.getValueMap().get(ApplicationConstants.CARD_SIZE, String.class));
+
+						fundCards.add(itemMap);
+					}
+				}
+			}
+		}catch (Exception e){
+			LOG.error("\n ERROR while getting Fund Cards Details {} ",e.getMessage());
+		}
+		return fundCards;
+	}
+
+	/**
+	 * The method to process the multi Left Cards
+	 * @return List
+	 */
+	public List<Map<String, Object>> getLeftCards() {
+		List<Map<String, Object>> leftCards = new ArrayList<>();
+		try {
+			if (componentResource != null ) {
+				Resource items = componentResource.getChild(ApplicationConstants.LEFT_CARDS_TYPE);
+				if (items != null) {
+					for (Resource item : items.getChildren()) {
+						Map<String, Object> itemMap = new HashMap<>();
+            List<Map<String, String>> ctas = ButtonsModel.getCtas(item);
+						itemMap.put(ApplicationConstants.HEADING, item.getValueMap().get(ApplicationConstants.HEADING, String.class));
+						itemMap.put(ApplicationConstants.TAG, item.getValueMap().get(ApplicationConstants.TAG, String.class));
+						itemMap.put(ApplicationConstants.LAYOUT, item.getValueMap().get(ApplicationConstants.LAYOUT, String.class));
+						itemMap.put(ApplicationConstants.CONTENT, item.getValueMap().get(ApplicationConstants.CONTENT, String.class));
+						itemMap.put(ApplicationConstants.IMAGE_URL, item.getValueMap().get(ApplicationConstants.IMAGE_URL, String.class));
+						itemMap.put(ApplicationConstants.CTAS, ctas);
+
+						leftCards.add(itemMap);
+					}
+				}
+			}
+		}catch (Exception e){
+			LOG.error("\n ERROR while getting Left Cards Details {} ",e.getMessage());
+		}
+		return leftCards;
+	}
+
+	/**
+	 * The method to process the multi Row Cards
+	 * @return List
+	 */
+	public List<Map<String, Object>> getRowCards() {
+		List<Map<String, Object>> rowCards = new ArrayList<>();
+		try {
+			if (componentResource != null ) {
+				Resource items = componentResource.getChild(ApplicationConstants.ROW_CARDS_TYPE);
+				if (items != null) {
+					for (Resource item : items.getChildren()) {
+						Map<String, Object> itemMap = new HashMap<>();
+            String href = LinkUtil.getMappedURL(
+              item.getValueMap().get(ApplicationConstants.HREF, String.class),
+              item.getResourceResolver()
+            );
+
+						itemMap.put(ApplicationConstants.TITLE, item.getValueMap().get(ApplicationConstants.TITLE, String.class));
+						itemMap.put(ApplicationConstants.DATE, item.getValueMap().get(ApplicationConstants.DATE, String.class));
+						itemMap.put(ApplicationConstants.CONTENT, item.getValueMap().get(ApplicationConstants.CONTENT, String.class));
+						itemMap.put(ApplicationConstants.IMAGE_URL, item.getValueMap().get(ApplicationConstants.IMAGE_URL, String.class));
+						itemMap.put(ApplicationConstants.HREF, href);
+						itemMap.put(ApplicationConstants.TARGET, item.getValueMap().get(ApplicationConstants.TARGET, String.class));
+
+						rowCards.add(itemMap);
+					}
+				}
+			}
+		}catch (Exception e){
+			LOG.error("\n ERROR while getting Left Cards Details {} ",e.getMessage());
+		}
+		return rowCards;
+	}
+
+	/**
+	 * The method to process the multi Text Cards
+	 * @return List
+	 */
+	public List<Map<String, Object>> getTextCards() {
+		List<Map<String, Object>> textCards = new ArrayList<>();
+		try {
+			if (componentResource != null ) {
+				Resource items = componentResource.getChild(ApplicationConstants.TEXT_CARDS_TYPE);
+				if (items != null) {
+					for (Resource item : items.getChildren()) {
+						Map<String, Object> itemMap = new HashMap<>();
+						itemMap.put(ApplicationConstants.HEADING, item.getValueMap().get(ApplicationConstants.HEADING, String.class));
+						itemMap.put(ApplicationConstants.CONTENT, item.getValueMap().get(ApplicationConstants.CONTENT, String.class));
+
+						textCards.add(itemMap);
+					}
+				}
+			}
+		}catch (Exception e){
+			LOG.error("\n ERROR while getting Text Cards Details {} ",e.getMessage());
+		}
+		return textCards;
+	}
+}
