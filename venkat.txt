@@ -43,4 +43,6 @@ RewriteRule /robots.txt /bin/cfs/robots.txt?1=1 [PT,L]
 RewriteRule /sitemap.xml /content/cfs-winged/au/en.sitemap.xml?1=1 [PT,L]
 RewriteRule ^/next/(.+)$ /$1 [QSA,L,R=302]
 
+https://preview-p110482-e1080534.adobeaemcloud.com/personal/tools-resources/download-cfs-edge-app-now.html
+https://preview-p110482-e1080534.adobeaemcloud.com/join-now.html?adobe_mc=MCMID%3D26344227651841094750042235830662926697%7CMCORGID%3DAB765EB55C544D790A495CFA%2540AdobeOrg%7CTS%3D1710125934.html
 
