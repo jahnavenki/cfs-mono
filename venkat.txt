@@ -46,3 +46,11 @@ RewriteRule ^/next/(.+)$ /$1 [QSA,L,R=302]
 https://preview-p110482-e1080534.adobeaemcloud.com/personal/tools-resources/download-cfs-edge-app-now.html
 https://preview-p110482-e1080534.adobeaemcloud.com/join-now.html?adobe_mc=MCMID%3D26344227651841094750042235830662926697%7CMCORGID%3DAB765EB55C544D790A495CFA%2540AdobeOrg%7CTS%3D1710125934.html
 
+
+# Block preview URLs
+RewriteCond %{REQUEST_URI} ^/preview [NC]
+RewriteRule ^(.*)$ - [F,L]
+
+# Block preview query parameters
+RewriteCond %{QUERY_STRING} ^.*adobe_mc.*$ [NC]
+RewriteRule ^(.*)$ - [F,L]
