@@ -54,3 +54,7 @@ RewriteRule ^(.*)$ - [F,L]
 # Block preview query parameters
 RewriteCond %{QUERY_STRING} ^.*adobe_mc.*$ [NC]
 RewriteRule ^(.*)$ - [F,L]
+
+User-agent: *
+Disallow: /preview
+Disallow: /*adobe_mc=*
