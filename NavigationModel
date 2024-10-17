@@ -1,0 +1,613 @@
+package com.colonialfirststate.model;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Default;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+
+import com.colonialfirststate.constants.GenericConstants;
+
+@Model(adaptables = Resource.class)
+public class NavigationModel {
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("siteLogo")
+    private String siteLogo;
+
+    @Inject
+    @Optional
+    @Default(values = "Personal")
+    @Named("personalLabel")
+    private String personalLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("personalLink")
+    private String personalLink;
+
+    @Inject
+    @Optional
+    @Default(values = "adviser")
+    @Named("adviserLabel")
+    private String adviserLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("adviserPlatformLink")
+    private String adviserPlatformLink;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("adviserInvestorLink")
+    private String adviserInvestorLink;
+
+    @Inject
+    @Optional
+    @Default(values = "Employer")
+    @Named("employerLabel")
+    private String employerLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("employerLink")
+    private String employerLink;
+
+    @Inject
+    @Optional
+    @Default(values = "About Us")
+    @Named("aboutusLabel")
+    private String aboutusLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("aboutusLink")
+    private String aboutusLink;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("menuLabel")
+    private String menuLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Search")
+    @Named("searchLabel")
+    private String searchLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Close")
+    @Named("closeLabel")
+    private String closeLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Login")
+    @Named("loginLabel")
+    private String loginLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("loginLink")
+    private String loginLink;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("menubottomText")
+    private String menubottomText;
+
+    @Inject
+    @Optional
+    @Default(values = "Search")
+    @Named("personalsearchLabel")
+    private String personalsearchLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Search")
+    @Named("platformsearchLabel")
+    private String platformsearchLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Search")
+    @Named("investmentssearchLabel")
+    private String investmentssearchLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Search")
+    @Named("employersearchLabel")
+    private String employersearchLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Search")
+    @Named("aboutussearchLabel")
+    private String aboutussearchLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Search Result")
+    @Named("resultLabel")
+    private String resultLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("personalsearchLink")
+    private String personalsearchLink;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("platformsearchLink")
+    private String platformsearchLink;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("investmentssearchLink")
+    private String investmentssearchLink;
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("employersearchLink")
+    private String employersearchLink;
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("aboutussearchLink")
+    private String aboutussearchLink;
+    @Inject
+    @Optional
+    @Default(values = "Popular Searh")
+    @Named("popularSearchLabel")
+    private String popularSearchLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("personalpopularLinks")
+    private String[] personalPopularLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("platformpopularLinks")
+    private String[] platformPopularLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("investmentspopularLinks")
+    private String[] investmentsPopularLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("employerpopularLinks")
+    private String[] employerPopularLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("aboutuspopularLinks")
+    private String[] aboutusPopularLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "Quick Links")
+    @Named("personalquicklinkLabel")
+    private String personalQuicklinkLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Quick Links")
+    @Named("platformquicklinkLabel")
+    private String platformQuicklinkLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Quick Links")
+    @Named("investmentsquicklinkLabel")
+    private String investmentsQuicklinkLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Quick Links")
+    @Named("employerquicklinkLabel")
+    private String employerQuicklinkLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "Quick Links")
+    @Named("personalquicklinkLabel")
+    private String aboutusQuicklinkLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("personalquickLinks")
+    private String[] personalQuickLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("platformquickLinks")
+    private String[] platformQuickLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("investmentsquickLinks")
+    private String[] investmentsQuickLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("employerquickLinks")
+    private String[] employerQuickLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("aboutusquickLinks")
+    private String[] aboutusQuickLinks;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("navcontactNum")
+    private String navcontactNum;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("investButtonLink")
+    private String investButtonLink;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    @Named("platformButtonLink")
+    private String platformButtonLink;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    private String investButtonLabel;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    private String platformButtonName;
+
+    @Inject
+    @Optional
+    @Default(values = "")
+    private String personalLinkName;
+
+    public final String getSiteLogo() {
+        return siteLogo;
+    }
+
+    public final void setSiteLogo(String siteLogo) {
+        this.siteLogo = siteLogo;
+    }
+
+    public final String getPersonalLabel() {
+        return personalLabel;
+    }
+
+    public final void setPersonalLabel(String personalLabel) {
+        this.personalLabel = personalLabel;
+    }
+
+    public final String getPersonalLink() {
+        return personalLink;
+    }
+
+    public final void setPersonalLink(String personalLink) {
+        this.personalLink = personalLink;
+    }
+
+    public final String getAdviserLabel() {
+        return adviserLabel;
+    }
+
+    public final void setAdviserLabel(String adviserLabel) {
+        this.adviserLabel = adviserLabel;
+    }
+
+    public final String getAdviserPlatformLink() {
+        return adviserPlatformLink;
+    }
+
+    public final String getAdviserInvestorLink() {
+        return adviserInvestorLink;
+    }
+
+    public final String getEmployerLabel() {
+        return employerLabel;
+    }
+
+    public final void setEmployerLabel(String employerLabel) {
+        this.employerLabel = employerLabel;
+    }
+
+    public final String getEmployerLink() {
+        return employerLink;
+    }
+
+    public final void setEmployerLink(String employerLink) {
+        this.employerLink = employerLink;
+    }
+
+    public final String getAboutusLabel() {
+        return aboutusLabel;
+    }
+
+    public final void setAboutusLabel(String aboutusLabel) {
+        this.aboutusLabel = aboutusLabel;
+    }
+
+    public final String getAboutusLink() {
+        return aboutusLink;
+    }
+
+    public final void setAboutusLink(String aboutusLink) {
+        this.aboutusLink = aboutusLink;
+    }
+
+    public final String getMenuLabel() {
+        return menuLabel;
+    }
+
+    public final void setMenuLabel(String menuLabel) {
+        this.menuLabel = menuLabel;
+    }
+
+    public final String getSearchLabel() {
+        return searchLabel;
+    }
+
+    public final void setSearchLabel(String searchLabel) {
+        this.searchLabel = searchLabel;
+    }
+
+    public final String getLoginLabel() {
+        return loginLabel;
+    }
+
+    public final void setLoginLabel(String loginLabel) {
+        this.loginLabel = loginLabel;
+    }
+
+    public final String getLoginLink() {
+        return loginLink;
+    }
+
+    public final void setLoginLink(String loginLink) {
+        this.loginLink = loginLink;
+    }
+
+    public final String getMenubottomText() {
+        return menubottomText;
+    }
+
+    public final void setMenubottomText(String menubottomText) {
+        this.menubottomText = menubottomText;
+    }
+
+    public final String getPersonalSearchLabel() {
+        return personalsearchLabel;
+    }
+
+    public final String getPlatformSearchLabel() {
+        return platformsearchLabel;
+    }
+
+    public final String getInvestmentsSearchLabel() {
+        return investmentssearchLabel;
+    }
+
+    public final String getEmployerSearchLabel() {
+        return employersearchLabel;
+    }
+
+    public final String getAboutusSearchLabel() {
+        return aboutussearchLabel;
+    }
+
+    public final String getPersonalSearchLink() {
+        return personalsearchLink;
+    }
+
+    public final String getPlatformSearchLink() {
+        return platformsearchLink;
+    }
+
+    public final String getInvestmentsSearchLink() {
+        return investmentssearchLink;
+    }
+
+    public final String getEmployerSearchLink() {
+        return employersearchLink;
+    }
+
+    public final String getAboutusSearchLink() {
+        return aboutussearchLink;
+    }
+
+    public final String getPopularSearchLabel() {
+        return popularSearchLabel;
+    }
+
+    public final void setPopularSearchLabel(String popularSearchLabel) {
+        this.popularSearchLabel = popularSearchLabel;
+    }
+
+    public final String[] getPersonalPopularLinks() {
+        return personalPopularLinks;
+    }
+
+    public final String[] getPlatformPopularLinks() {
+        return platformPopularLinks;
+    }
+
+    public final String[] getInvestmentsPopularLinks() {
+        return investmentsPopularLinks;
+    }
+
+    public final String[] getEmployerPopularLinks() {
+        return employerPopularLinks;
+    }
+
+    public final String[] getAboutusPopularLinks() {
+        return aboutusPopularLinks;
+    }
+
+    public final String getPersonalQuicklinkLabel() {
+        return personalQuicklinkLabel;
+    }
+
+    public final String getPlatformQuicklinkLabel() {
+        return platformQuicklinkLabel;
+    }
+
+    public final String getInvestmentsQuicklinkLabel() {
+        return investmentsQuicklinkLabel;
+    }
+
+    public final String getEmployerQuicklinkLabel() {
+        return employerQuicklinkLabel;
+    }
+
+    public final String getAboutusQuicklinkLabel() {
+        return aboutusQuicklinkLabel;
+    }
+
+    public final String[] getPersonalQuickLinks() {
+        return personalQuickLinks;
+    }
+
+    public final String[] getPlatformQuickLinks() {
+        return platformQuickLinks;
+    }
+
+    public final String[] getInvestmentsQuickLinks() {
+        return investmentsQuickLinks;
+    }
+
+    public final String[] getEmployerQuickLinks() {
+        return employerQuickLinks;
+    }
+
+    public final String[] getAboutusQuickLinks() {
+        return aboutusQuickLinks;
+    }
+
+    public final String getCloseLabel() {
+        return closeLabel;
+    }
+
+    public final String getResultLabel() {
+        return resultLabel;
+    }
+
+    public final void setCloseLabel(String closeLabel) {
+        this.closeLabel = closeLabel;
+    }
+
+    public final String getNavcontactNum() {
+        return navcontactNum;
+    }
+
+    public final void setNavcontactNum(String navcontactNum) {
+        this.navcontactNum = navcontactNum;
+    }
+
+    public final String getInvestButtonLink() {
+        return investButtonLink;
+    }
+
+    public final void setInvestButtonLink(String investButtonLink) {
+        this.investButtonLink = investButtonLink;
+    }
+
+    public final String getPlatformButtonLink() {
+        return platformButtonLink;
+    }
+
+    public final void setPlatformButtonLink(String platformButtonLink) {
+        this.platformButtonLink = platformButtonLink;
+    }
+
+    public final String getHomePagePath(String currentPagePath) {
+        String path = "";
+        if (null != this.adviserPlatformLink
+                && currentPagePath.startsWith(adviserPlatformLink)) {
+            path = adviserPlatformLink;
+        } else if (null != adviserInvestorLink
+                && currentPagePath.startsWith(adviserInvestorLink)) {
+            path = adviserInvestorLink;
+        } else if (null != employerLink
+                && currentPagePath.startsWith(employerLink)) {
+            path = employerLink;
+        } else if (null != aboutusLink
+                && currentPagePath.startsWith(aboutusLink)) {
+            path = aboutusLink;
+        } else if (null != personalLink) {
+            path = personalLink;
+        }
+        return path;
+
+    }
+
+    public final String getHomePage(String currentPagePath) {
+        String homePage = "";
+        if (null != this.adviserPlatformLink
+                && currentPagePath.startsWith(adviserPlatformLink)) {
+            homePage = GenericConstants.PLATFORMS_HOME;
+        } else if (null != adviserInvestorLink
+                && currentPagePath.startsWith(adviserInvestorLink)) {
+            homePage = GenericConstants.INVESTMENTS_HOME;
+        } else if (null != employerLink
+                && currentPagePath.startsWith(employerLink)) {
+            homePage = GenericConstants.EMPLOYER_HOME;
+        } else if (null != aboutusLink
+                && currentPagePath.startsWith(aboutusLink)) {
+            homePage = GenericConstants.ABOUTUS_HOME;
+        } else if (null != personalLink) {
+            homePage = GenericConstants.PERSONAL_HOME;
+        }
+        return homePage;
+
+    }
+
+    public final String getInvestButtonLabel() {
+        return investButtonLabel;
+    }
+
+    public final String getPlatformButtonName() {
+        return platformButtonName;
+    }
+
+    public final String getPersonalLinkName() {
+        return personalLinkName;
+    }
+}
