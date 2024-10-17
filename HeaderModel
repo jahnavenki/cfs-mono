@@ -1,0 +1,488 @@
+package au.com.cfs.winged.core.models;
+
+import au.com.cfs.winged.core.common.constants.ApplicationConstants;
+import au.com.cfs.winged.core.models.pojo.Drawer;
+import au.com.cfs.winged.core.models.pojo.NavigationItem;
+import au.com.cfs.winged.helpers.LinkUtil;
+
+import com.day.cq.wcm.api.Page;
+import com.day.cq.wcm.api.designer.Style;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.DefaultInjectionStrategy;
+import org.apache.sling.models.annotations.Model;
+
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+@Model(
+        adaptables = SlingHttpServletRequest.class,
+        adapters = HeaderModel.class,
+        defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL
+)
+public class HeaderModel {
+
+  private static final Logger LOG = LoggerFactory.getLogger(HeaderModel.class);
+
+  @ScriptVariable
+  private Style currentStyle;
+
+  @Inject
+  ResourceResolver resourceResolver;
+  
+  @Inject
+  SlingHttpServletRequest request;
+  
+  
+  @ScriptVariable
+  protected Page currentPage;
+  
+  private String headerBackgroundStyle;
+  private String backgroundBlur;
+  private String primaryMenuTitle;
+  private String logo;
+  private String logoAlt;
+  private String searchLabel;
+  private String searchCancelLabel;
+  private String searchPath;
+  private String popularLabel;
+  private String quickLinksLabel;
+  private String advisorTitle;
+  private String loginItemsLabel;
+  private String topDescription;
+  private String labelOpenInvestmentCTA;
+  private String hrefOpenInvestmentCTA;
+  private String labelOpenPlatformsCTA;
+  private String hrefOpenPlatformsCTA;
+  private String bottomDescription;
+  private String hrefBackToPersonal;
+  private String labelBackToPersonal;
+  private String buttonTitle;
+  private String buttonLink;
+  private String loginTitle;
+  private String loginLink;
+  private String loginMenuTitle;
+  private String loginMenuLink;
+
+  private String hideNavigationButton;
+
+  private List<NavigationItem> primaryMenu = new ArrayList<>();
+
+
+  @PostConstruct
+  public void initModel() {
+    LOG.debug("HeaderModel - Initiated");
+    try {
+
+      initiateProperties();
+
+      //Get Level 1 Navigation links
+      Resource navItems = resourceResolver.resolve(currentStyle.getPath()+"/"+ "navItems");
+
+      if(navItems != null) {
+        LOG.debug("HeaderModel - Loading Level 01 Navigation links");
+        for (Resource navItem : navItems.getChildren()) {
+
+          //Get Drawers(columns)
+          Resource columns = navItem.getChild("drawer");
+          List<Drawer> drawers = new ArrayList<>();
+
+          if (columns != null) {
+
+            for (Resource column : columns.getChildren()) {
+              Drawer drawer = new Drawer();
+
+              //Get the Level 2 Navigation links
+              Resource navItemsL2 = column.getChild("navItemsLevel2");
+              List<NavigationItem> itemsL2 = processNavigationItemsL2(navItemsL2);
+
+              drawer.setMenus(itemsL2);
+              drawers.add(drawer);
+            }
+          }
+
+          String title = navItem.getValueMap().get(ApplicationConstants.TITLE,String.class);
+          String hideButton = navItem.getValueMap().get(ApplicationConstants.HIDE_BUTTON,String.class);
+          String mobileTitle = navItem.getValueMap().get(ApplicationConstants.MOBILE_TITLE, ApplicationConstants.OVERVIEW);
+          String href = LinkUtil.getMappedURL(
+            navItem.getValueMap().get(ApplicationConstants.HREF, String.class),
+            navItem.getResourceResolver()
+          );
+          
+          NavigationItem navigationItemL1 = new NavigationItem(title, hideButton, mobileTitle, href, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, null, navItem.getResourceResolver());
+          navigationItemL1.setDrawers(drawers);
+
+          primaryMenu.add(navigationItemL1);
+
+        }
+      }else {
+        LOG.error("HeaderModel - Could not Load Level 01 Navigation links");
+      }
+
+      LOG.debug("HeaderModel - finished");
+    }catch (Exception e){
+      LOG.error("\n ERROR while getting Navigation Items Details from Current Style {} ",e.getMessage());
+    }
+  }
+
+  private List<NavigationItem> processNavigationItemsL2(Resource navItemsL2) {
+    List<NavigationItem>  itemsL2 = new ArrayList<>();
+
+    LOG.debug("HeaderModel - Loading Level 02 Navigation links");
+
+    if(navItemsL2 != null) {
+      for (Resource navItemL2 : navItemsL2.getChildren()) {
+
+        //Get the Level 3 Navigation links
+        Resource navItemsL3 = navItemL2.getChild("navItemsLevel3");
+        List<NavigationItem> itemsL3 = processNavigationItemsL3(navItemsL3);
+
+        String title = navItemL2.getValueMap().get(ApplicationConstants.TITLE,String.class);
+		
+		  String tileButton = navItemL2.getValueMap().get(ApplicationConstants.TILE_BUTTON,String.class);
+      String tileDescription = navItemL2.getValueMap().get(ApplicationConstants.TILE_DESCRIPTION,String.class);
+          String tilebuttonDescription = navItemL2.getValueMap().get(ApplicationConstants.TILE_BUTTON_DESCRIPTION,String.class);
+		  String tileImage = navItemL2.getValueMap().get(ApplicationConstants.TILE_IMAGE,String.class);
+		  
+        String href = LinkUtil.getMappedURL(
+            navItemL2.getValueMap().get(ApplicationConstants.HREF, String.class),
+            navItemL2.getResourceResolver()
+        );
+		
+		 String tileHref = LinkUtil.getMappedURL(
+            navItemL2.getValueMap().get(ApplicationConstants.TILE_HREF, String.class),
+            navItemL2.getResourceResolver()
+        );
+
+        NavigationItem navigationItemL2 = new NavigationItem(title, StringUtils.EMPTY, StringUtils.EMPTY, href, tileButton, tileHref, tileDescription, tilebuttonDescription, tileImage, itemsL3, navItemL2.getResourceResolver());
+        itemsL2.add(navigationItemL2);
+      }
+    }
+
+    return itemsL2;
+  }
+
+  private List<NavigationItem> processNavigationItemsL3(Resource navItemsL3) {
+    List<NavigationItem> itemsL3 = new ArrayList<>();
+    if(navItemsL3 != null){
+      for (Resource navItemL3 : navItemsL3.getChildren()) {
+        String title = navItemL3.getValueMap().get(ApplicationConstants.TITLE,String.class);
+        String href = LinkUtil.getMappedURL(
+            navItemL3.getValueMap().get(ApplicationConstants.HREF, String.class),
+            navItemL3.getResourceResolver()
+        );
+        
+        NavigationItem navigationItemL3 = new NavigationItem( title, StringUtils.EMPTY, StringUtils.EMPTY, href, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, null, navItemL3.getResourceResolver());
+        itemsL3.add(navigationItemL3);
+      }
+    }
+
+    return itemsL3;
+  }
+
+  private void initiateProperties() {
+    if (currentStyle != null) {
+      headerBackgroundStyle = currentStyle.get("headerBackgroundStyle", String.class);
+
+      backgroundBlur = currentStyle.get("backgroundBlur", String.class);
+	  if (StringUtils.isBlank(backgroundBlur)) {
+		  backgroundBlur = "on";
+	  }
+      primaryMenuTitle = currentStyle.get("primaryMenuTitle", String.class);
+      logo = currentStyle.get("logo", String.class);
+      logoAlt = currentStyle.get("logoAlt", String.class);
+      hideNavigationButton = currentStyle.get("hideNavigationButton", String.class);
+      buttonTitle = currentStyle.get("buttonTitle", String.class);
+      buttonLink = currentStyle.get("buttonLink", String.class);
+      loginTitle = currentStyle.get("loginTitle", String.class);
+      loginLink = currentStyle.get("loginLink", String.class);
+      loginMenuTitle = currentStyle.get("loginMenuTitle", String.class);
+      loginMenuLink = currentStyle.get("loginMenuLink", String.class);
+      searchLabel = currentStyle.get("searchLabel", String.class);
+      searchCancelLabel = currentStyle.get("searchCancelLabel", String.class);
+      searchPath = currentStyle.get("searchPath", String.class);
+      quickLinksLabel = currentStyle.get("quickLinksLabel", String.class);
+      loginItemsLabel = currentStyle.get("loginItemsLabel", String.class);
+      popularLabel = currentStyle.get("popularLabel", String.class);
+      advisorTitle = currentStyle.get("advisorTitle", String.class);
+      topDescription = currentStyle.get("topDescription", String.class);
+
+      labelOpenInvestmentCTA = currentStyle.get("labelOpenInvestmentCTA", String.class);
+      hrefOpenInvestmentCTA = LinkUtil.getMappedURL(
+        currentStyle.get("hrefOpenInvestmentCTA", String.class),
+        resourceResolver
+      );
+
+      labelOpenPlatformsCTA = currentStyle.get("labelOpenPlatformsCTA", String.class);
+      hrefOpenPlatformsCTA = LinkUtil.getMappedURL(
+        currentStyle.get("hrefOpenPlatformsCTA", String.class),
+        resourceResolver
+      );
+      
+      labelBackToPersonal = currentStyle.get("labelBackToPersonal", String.class);
+      hrefBackToPersonal = LinkUtil.getMappedURL(
+        currentStyle.get("hrefBackToPersonal", String.class),
+        resourceResolver
+      );
+      
+      bottomDescription = currentStyle.get("bottomDescription", String.class);
+      
+	  if (currentPage != null) {
+			ValueMap vm = currentPage.getProperties();		
+			String pagebackgroundBlur =  vm.get("backgroundBlur", "");
+			if (StringUtils.isNotBlank(pagebackgroundBlur)) {
+				backgroundBlur = pagebackgroundBlur;
+			}			
+	   }
+
+    }else {
+      LOG.error("HeaderModel - ERROR : Could not Load Properties from the CurrentStyle module.");
+    }
+  }
+
+  public List<Map<String, String>> getPrimaryItems() {
+    List<Map<String, String>> primaryItemsList = new ArrayList<>();
+    try {
+      Resource primaryNavItems = resourceResolver.resolve(currentStyle.getPath()+"/"+ "primaryItems");
+      if(primaryNavItems != null){
+        for (Resource primaryItem : primaryNavItems.getChildren()) {
+          Map<String,String> itemMap = new HashMap<>();
+          String label = primaryItem.getValueMap().get(ApplicationConstants.LINK_LABEL,String.class);
+          String linkType = primaryItem.getValueMap().get(ApplicationConstants.LINK_TYPE,String.class);
+          String linkDescription = primaryItem.getValueMap().get(ApplicationConstants.LINK_DESCRIPTION,String.class);
+          String href = LinkUtil.getMappedURL(
+            primaryItem.getValueMap().get(ApplicationConstants.LINK,String.class),
+            primaryItem.getResourceResolver()
+          );
+          
+          itemMap.put(ApplicationConstants.LABEL, label);
+          itemMap.put(ApplicationConstants.LINK_DESCRIPTION, linkDescription);
+          itemMap.put(ApplicationConstants.HREF, href);
+          itemMap.put(ApplicationConstants.LINK_TYPE, linkType);
+          primaryItemsList.add(itemMap);
+        }
+      }
+    }catch (Exception e){
+      LOG.error("\n ERROR while getting Primary Items Menu Links Items Details {} ",e.getMessage());
+    }
+    return primaryItemsList;
+  }
+
+
+  public List<Map<String, String>> getSecondaryMenu() {
+    List<Map<String, String>> secondaryItems = new ArrayList<>();
+    try {
+      Resource secondaryNavItems = resourceResolver.resolve(currentStyle.getPath()+"/"+ "secondaryMenuItems");
+      if(secondaryNavItems != null){
+        for (Resource secondaryItem : secondaryNavItems.getChildren()) {
+          Map<String,String> itemMap = new HashMap<>();
+          String label = secondaryItem.getValueMap().get(ApplicationConstants.LINK_LABEL,String.class);
+          String href = LinkUtil.getMappedURL(
+            secondaryItem.getValueMap().get(ApplicationConstants.LINK,String.class),
+            secondaryItem.getResourceResolver()
+          );
+          
+          itemMap.put(ApplicationConstants.LABEL, label);
+          itemMap.put(ApplicationConstants.HREF, href);
+          secondaryItems.add(itemMap);
+        }
+      }
+    }catch (Exception e){
+      LOG.error("\n ERROR while getting Secondary Menu Links Items Details {} ",e.getMessage());
+    }
+    return secondaryItems;
+  }
+
+  public List<Map<String, String>> getPopularLinks() {
+    List<Map<String, String>> popularLinkItems = new ArrayList<>();
+    try {
+      Resource popularLinks = resourceResolver.resolve(currentStyle.getPath()+"/"+ "popularLinks");
+      if(popularLinks != null){
+        for (Resource popularLink : popularLinks.getChildren()) {
+          Map<String,String> itemMap = new HashMap<>();
+          String label = popularLink.getValueMap().get(ApplicationConstants.LABEL,String.class);
+          String href = LinkUtil.getMappedURL(
+            popularLink.getValueMap().get(ApplicationConstants.HREF,String.class),
+            popularLink.getResourceResolver()
+          );
+          
+          itemMap.put(ApplicationConstants.LABEL, label);
+          itemMap.put(ApplicationConstants.HREF, href);
+          popularLinkItems.add(itemMap);
+        }
+      }
+    }catch (Exception e){
+      LOG.error("\n ERROR while getting Popular Links Items Details {} ",e.getMessage());
+    }
+    return popularLinkItems;
+  }
+
+  public List<Map<String, String>> getQuickLinks() {
+    List<Map<String, String>> quickLinkItems = new ArrayList<>();
+    try {
+      Resource quickLinks = resourceResolver.resolve(currentStyle.getPath()+"/"+ "quickLinks");
+      if(quickLinks != null){
+        for (Resource quickLink : quickLinks.getChildren()) {
+          Map<String,String> itemMap = new HashMap<>();
+          String label = quickLink.getValueMap().get(ApplicationConstants.LABEL,String.class);
+          String href = LinkUtil.getMappedURL(
+            quickLink.getValueMap().get(ApplicationConstants.HREF,String.class),
+            quickLink.getResourceResolver()
+          );
+          
+          itemMap.put(ApplicationConstants.LABEL, label);
+          itemMap.put(ApplicationConstants.HREF, href);
+          quickLinkItems.add(itemMap);
+        }
+      }
+    }catch (Exception e){
+      LOG.error("\n ERROR while getting Quick Links Items Details {} ",e.getMessage());
+    }
+    return quickLinkItems;
+  }
+
+  //To get Login items
+  public List<Map<String, String>> getLoginItems() {
+    List<Map<String, String>> loginMenuItems = new ArrayList<>();
+    try {
+      if(resourceResolver !=null){
+      Resource loginItems = resourceResolver.resolve(currentStyle.getPath()+"/"+ "loginItems");
+      if(loginItems != null){
+        for (Resource loginItem : loginItems.getChildren()) {
+          Map<String,String> itemMap = new HashMap<>();
+          String loginLabel = loginItem.getValueMap().get(ApplicationConstants.LOGIN_LABEL,String.class);
+          String linkLogin = LinkUtil.getMappedURL(
+                  loginItem.getValueMap().get(ApplicationConstants.LINK_LOGIN,String.class),
+                  loginItem.getResourceResolver()
+          );
+
+          itemMap.put(ApplicationConstants.LOGIN_LABEL, loginLabel);
+          itemMap.put(ApplicationConstants.LINK_LOGIN, linkLogin);
+          loginMenuItems.add(itemMap);
+        }
+      }
+    }
+    }catch (Exception e){
+      LOG.error("\n ERROR while getting Login Menu Items Details {} ",e.getMessage());
+    }
+    return loginMenuItems;
+  }
+
+  public String getLabelBackToPersonal() {
+    return labelBackToPersonal;
+  }
+
+  public String getHrefBackToPersonal() {
+    return hrefBackToPersonal;
+  }
+
+  public String getAdvisorTitle() {
+    return advisorTitle;
+  }
+
+  public String getTopDescription() {
+    return topDescription;
+  }
+
+  public String getLabelOpenInvestmentCTA() {
+    return labelOpenInvestmentCTA;
+  }
+
+  public String getLabelOpenPlatformsCTA() {
+    return labelOpenPlatformsCTA;
+  }
+
+  public String getHrefOpenInvestmentCTA() {
+    return hrefOpenInvestmentCTA;
+  }
+
+  public String getHrefOpenPlatformsCTA() {
+    return hrefOpenPlatformsCTA;
+  }
+
+  public String getBottomDescription() {
+    return bottomDescription;
+  }
+
+  public String getPopularLabel() {
+    return popularLabel;
+  }
+
+  public String getQuickLinksLabel() {
+    return quickLinksLabel;
+  }
+
+  public String getLoginItemsLabel() {
+    return loginItemsLabel;
+  }
+
+  public String getSearchCancelLabel() {
+    return searchCancelLabel;
+  }
+
+  public String getSearchLabel() {
+    return searchLabel;
+  }
+
+  public List<NavigationItem> getPrimaryMenu() {
+    return primaryMenu;
+  }
+
+  public String getLogoAlt() {
+    return logoAlt;
+  }
+
+  public String getLogo() {
+    return logo;
+  }
+
+  public String getPrimaryMenuTitle() {
+    return primaryMenuTitle;
+  }
+
+  public String getHeaderBackgroundStyle() {
+    return headerBackgroundStyle;
+  }
+
+  public String getSearchPath() {
+	return searchPath;
+ }
+
+  public String getBackgroundBlur() {
+    return backgroundBlur;
+  }
+  public String getButtonTitle() {
+    return buttonTitle;
+  }
+  public String getButtonLink() {
+    return buttonLink;
+  }
+  public String getLoginTitle() {
+    return loginTitle;
+  }
+  public String getLoginLink() {
+    return loginLink;
+  }
+  public String getLoginMenuTitle() {
+    return loginMenuTitle;
+  }
+  public String getLoginMenuLink() {
+    return loginMenuLink;
+  }
+  public String getHideNavigationButton() {
+    return hideNavigationButton;
+  }
+}
