@@ -1,49 +1,498 @@
-Subject: Preview URLs Being Indexed by Search Engines Despite Blocking Rules
+<!--/*
+  Note all the x-cq-linkchecker below is due to us building the component statically atm
+  This should be removed when going into AEM
+  */-->
+  <header
+  data-sly-use.model="au.com.cfs.winged.core.models.HeaderModel"
+  data-sly-use.spacerTemp="../../content/spacer/spacerTemplate.html"
+  class="Header Header--background-blur-${model.backgroundBlur} ${model.headerBackgroundStyle}"
+  data-cmp-is="header"
+  data-visible="Members"
+  data-megamenu="closed"
+  data-hamburger="closed"
+  data-search="closed"
+  data-select="closed"
+  data-hideup="0"
+>
+<div data-cmp-hook-header="container">
+<div class="Header__Top_Wrapper">
+<div class="Header__Top_Container">
+  <div class="wrapper">
+    <div class="Header__Top">
+      <div class="Header__MenuSelect">
+        <button title="${model.primaryMenuTitle}" class="Header__MenuSelectButton" data-cmp-hook-header="selectOpen">
+          <span>${model.primaryMenuTitle}</span>
+          <i class="iconfont-chevron-down" aria-hidden="true"></i>
+        </button>
 
-Description of Issue:
+        <sly data-sly-list.menuItems="${model.PrimaryItems}">
+          <div
+                  class="Header__Modal"
+                  role="dialog"
+                  aria-labelledby="model-adviser-heading"
+                  aria-describedby="model-adviser-desc"
+                  data-cmp-hook-header="selectModal"
+                  data-sly-test="${menuItems.linkType == 'adviser-overlay'}"
+                  data-id="${menuItems.label}"
+                  data-active="false"
+          >
+            <div class="wrapper">
+              <div class="aem-Grid aem-Grid--12">
+                <div class="aem-GridColumn aem-GridColumn--xs--12 aem-GridColumn--lg--10 aem-GridColumn--offset--lg--1">
+                  <div class="Header__ModalContent" data-cmp-hook-header="selectModalContent">
+                    <button class="Header__ModalClose" aria-label="Close modal" data-cmp-hook-header="selectClose">
+                      <span class="visually-hidden">Close modal</span>
+                      <i class="iconfont-close" aria-hidden="true"></i>
+                    </button>
 
-We are encountering an issue where URLs from our AEM Cloud preview environment are being indexed by search engines, specifically Google. This is affecting the search results for our production site and exposing preview links to public users, which should not be happening.
+                    <h2 id="model-adviser-heading" class="p2">${model.advisorTitle}</h2>
 
-Context:
+                    <!-- Spacer size 8 goes here -->
 
-Our preview environment (https://preview-p110482-e1080534.adobeaemcloud.com) is showing up in search results. We have identified multiple instances where Google has indexed URLs from this environment, such as:
+                    <p id="model-adviser-desc">${model.topDescription}</p>
 
-https://preview-p110482-e1080534.adobeaemcloud.com/join-now.html?...
-https://preview-p110482-e1080534.adobeaemcloud.com/personal/tools-resources/download-cfs-edge-app-now.html?...
-Despite our attempts to block these URLs, they are still appearing in search results.
+                    <div class="Header__ModalContentActions">
+                      <a class="Button Button--theme-blue Button--type-outline"
+                         data-cmp-hook-header="btnPlatform"
+                         data-user-type="2"
+                         data-user-type-string="Investments Adviser"
+                         data-user-home="/content/colonial-first-state/en/adviser/investments-adviser.html"
+                         href="${model.hrefOpenInvestmentCTA}"
+                      >
+                        <span class="Button__Label" style="pointer-events: none">
+                          ${model.labelOpenInvestmentCTA}
+                        </span>
+                      </a>
+                      <a class="Button Button--theme-blue Button--type-solid"
+                         data-cmp-hook-header="btnPlatform"
+                         data-user-type="3"
+                         data-user-type-string="Platform Adviser"
+                         data-user-home="/content/colonial-first-state/en/adviser/platform-adviser.html"
+                         href="${model.hrefOpenPlatformsCTA}"
+                      >
+                        <span class="Button__Label" style="pointer-events: none">
+                          ${model.labelOpenPlatformsCTA}
+                        </span>
+                      </a>
+                    </div>
 
-Technical Steps Taken:
+                    <p>${model.bottomDescription}</p>
 
-We have already implemented the following measures to block these preview URLs from being indexed:
+                    <!-- Spacer size 8 goes here -->
 
-Dispatcher Rewrite Rule:
+                    <p>
+                      <a x-cq-linkchecker="valid" class="Header__ModalCloseInline" href="${model.hrefBackToPersonal}">${model.labelBackToPersonal}</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sly>
+      </div>
 
-apache
-Copy code
-RewriteCond %{HTTP_HOST} ^preview [NC]
-RewriteRule ^(.*)$ - [F,L]
-robots.txt Configuration:
+      <nav class="Header__SecondaryMenu" aria-label="Secondary">
+        <ul class="Header__SecondaryMenuList" data-sly-list="${model.secondaryMenu}">
+          <li class="Header__SecondaryMenuItem">
+            <a x-cq-linkchecker="valid" class="Header__SecondaryMenuLink" href="${item.href}">${item.label}</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<div class="Header__MenuSelectList_Container">
+  <div class="wrapper">
+    <div class="Header__MenuSelectList">
+      <button class="Header__MenuSelectListClear">
+        <span class="visually-hidden">Close search</span>
+        <svg width="24" height="25" viewBox="0 0 24 25" fill="none">
+          <path d="M6 18.7031L18 6.70312" stroke="black" stroke-linecap="round"/>
+          <path d="M6 6.70312L18 18.7031" stroke="black" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <ul data-sly-list="${model.PrimaryItems}">
+        <li>
+          <a x-cq-linkchecker="valid" data-cmp-hook-header="selectOption" data-sly-element="${item.linkType == 'adviser-overlay' && 'button' @ context='unsafe'}" href="${item.href}">
+            <span class="Header__SecondaryMenuLabel">${item.label}</span>
+            <span class="Header__SecondaryMenuDescription">${item.linkDescription}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+<div class="Nav__container">
+<div class="wrapper">
+  <div class="Header__Bar">
+    <div class="Header__Logo">
+      <a href="/">
+        <img src="${model.logo}" alt="${model.logoAlt}" />
+      </a>
+    </div>
 
-plaintext
-Copy code
-User-agent: *
-Disallow: /preview
-Disallow: /*adobe_mc=*
-Internal Links Check: We have audited our production site and ensured that no links are pointing to the preview environment.
+    <button class="Header__HamburgerOpen" aria-label="Open navigation" data-cmp-hook-header="hamburger">
+      <span class="Header__HamburgerLine"></span>
+      <span class="Header__HamburgerLine"></span>
+      <span class="Header__HamburgerLine"></span>
+    </button>
 
-Cache Invalidations: We've purged caches from both our CDN and AEM Dispatcher, ensuring the rules are applied correctly.
+    <nav class="Header__PrimaryMenu"  aria-label="Primary">
+      <ul class="Header__PrimaryMenuList Header__PrimaryMenuList--Members" data-sly-list.menu="${model.primaryMenu}">
+        <li class="Header__PrimaryMenuItem" data-cmp-hook-header="megamenuItem" data-active="false" data-has-children="${menu.drawers && menu.drawers.size > 0 ? 'true' : 'false'}">
+          <sly data-sly-test="${!menu.hideButton}">
+            <div class="Header__PrimaryMenuButton">
+              <button
+                      x-cq-linkchecker="valid"
+                      data-sly-element="${menu.href && 'a' @ context='unsafe'}"
+                      href="${menu.href}"
+                      data-cmp-hook-header="megamenuOpen"
+                      data-target-id="${menu.title}"
+              >
+                <span>${menu.title}</span>
+                <i class="iconfont-chevron-down" aria-hidden="true"></i>
+              </button>
+            </div>
 
-Expected Behavior:
+            <div class="Header__Drawer">
+              <div class="Header__DrawerContainer">
+                <div class="aem-Grid aem-Grid--xs--12" data-sly-list="${menu.drawers}">
+                  <div class="aem-GridColumn aem-GridColumn--offset--xs--0 aem-GridColumn--xs--12">
+                    <div class="Header__DrawerWrapper">
+                      <div class="aem-Grid aem-Grid--xs--12">
+                        <sly data-sly-test="${item.title && item.href}">
+                          <div class="aem-GridColumn aem-GridColumn--xs--12">
+                            <div class="Header__DrawerTitle">
+                            <span
+                                    x-cq-linkchecker="valid"
+                                    href="${item.href}"
+                                    data-sly-element="${item.href && 'a' @ context='unsafe'}"
+                            >
+                              ${item.title}
+                            </span>
+                            </div>
+                          </div>
+                        </sly>
 
-Preview URLs such as https://preview-p110482-e1080534.adobeaemcloud.com/... should not be indexed by Google or any other search engine.
+                        <div class="aem-GridColumn aem-GridColumn--xs--12" data-sly-test="${item.body}">
+                          <p class="Header__DrawerBody">${item.body}</p>
+                        </div>
+                      </div>
 
-Request for Assistance:
+                      <div class="Header__DrawerMenuContainer ${(item.menus.size > 5) ? 'Header__DrawerMenuContainer--column' : 'Header__DrawerMenuContainer--row'}"
+                           data-sly-list.drawerMenu="${item.menus}"
+                      >
+                        <nav class="Header__DrawerMenu" aria-label="${drawerMenu.title}">
 
-We request support in identifying if there is any additional configuration or settings within Adobe AEM Cloud Service that need to be adjusted to ensure that preview URLs are completely blocked from being indexed by search engines. Could there be any issue with the dispatcher rules, or is there a way to enhance blocking through Adobe's infrastructure?
+                          <sly data-sly-test="${!drawerMenu.href && !drawerMenu.tileButton}">
+                            <h2 class="Header__DrawerMenuHeading">${drawerMenu.title}</h2>
+                          </sly>
 
-Thank you for your assistance in resolving this issue.
+                          <sly data-sly-test="${drawerMenu.href && !drawerMenu.tileButton}">
+                            <a class="Header__DrawerMenuHeading" href="${drawerMenu.href}">${drawerMenu.title}</a>
+                          </sly>
 
-Attachments:
+                          <sly data-sly-test="${!drawerMenu.tileButton}">
+                            <ul class="Header__DrawerMenuList" data-sly-list.drawerMenuItem="${drawerMenu.children}">
+                              <li class="Header__DrawerMenuItem">
+                                <a x-cq-linkchecker="valid" class="Header__DrawerMenuLink" href="${drawerMenuItem.href}">${drawerMenuItem.title}</a>
+                              </li>
+                            </ul>
+                          </sly>
 
-Screenshots from Google search results showing preview URLs.
-Relevant logs from AEM dispatcher showing Googlebot accessing these URLs.
+                          <sly data-sly-test="${drawerMenu.tileButton}">
+                            <div class="promo-tile-container">
+                              <div class="promo-tile-image">
+                                <img src="${drawerMenu.tileImage}"></img>
+                              </div>
+                              <div class="promo-tile-title">
+                                ${drawerMenu.title}
+                              </div>
+                              <div class="promo-tile-description">
+                                ${drawerMenu.tileDescription}
+                              </div>
+                              <div class="promo-tile-button">
+                                <a class="promo-button" style="text-decoration: none !important;" href=${drawerMenu.tileHref}>${drawerMenu.tilebuttonDescription}</a>
+                              </div>
+                            </div>
+                          </sly>
+
+                        </nav>
+                      </div>
+
+                      <div class="aem-Grid aem-Grid--xs--12">
+                        <div class="aem-GridColumn aem-GridColumn--xs--12" data-sly-test="${item.cta && item.cta.href}">
+                          <a x-cq-linkchecker="valid" class="Header__DrawerCta" href="${item.cta.href}"><strong>${item.cta.label}</strong></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="Header__DrawerClose" data-cmp-hook-header="megamenuClose">
+                  <span>Close menu</span>
+                  <i class="iconfont-close" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="Header__SubMenus">
+              <!-- START second level -->
+              <div class="Header__SubMenu" data-id="${menu.title}" data-level="1" data-active="false">
+                <div class="Header__SubMenuBack">
+                  <button data-cmp-hook-header="mobileMenuBack">
+                    <i class="iconfont-chevron-down" aria-hidden="true"></i>
+                    <span>Back</span>
+                  </button>
+                </div>
+
+                <sly data-sly-list="${menu.drawers}">
+                  <ul class="Header__SubMenuList">
+                    <sly data-sly-test="${itemList.index == 0}">
+                      <li class="Header__SubMenuItem" data-sly-test="${menu.href}">
+                        <a
+                                href="${menu.href @ context ='unsafe'}"
+                                data-cmp-hook-header="mobileMenuItem"
+                                data-target-id="${menu.title}-overview"
+                                x-cq-linkchecker="valid"
+                                class="Header__SubMenuHeading"
+                        >
+                          <span>Overview</span>
+                          </button>
+                      </li>
+                    </sly>
+
+                    <li class="Header__SubMenuItem" data-sly-test="${item.title.label}">
+                      <button
+                              href="${item.href}"
+                              data-sly-element="${item.href && 'a' @ context='unsafe'}"
+                              data-cmp-hook-header="mobileMenuItem"
+                              data-target-id="${menuItem.title}-${item.title}"
+                              class="Header__SubMenuHeading"
+                      >
+                        <span>${item.title}</span>
+                      </button>
+                    </li>
+
+                    <sly data-sly-list.subMenu="${item.menus}">
+                      <sly data-sly-test="${!subMenu.tileButton}">
+                        <li class="Header__SubMenuItem" data-level="1" data-has-children="${subMenu.children.size && subMenu.children.size > 0 ? 'true' : 'false'}">
+                          <button
+                                  x-cq-linkchecker="valid"
+                                  data-cmp-hook-header="${subMenu.children.size && subMenu.children.size > 0 ? 'mobileMenuItem' : ''}"
+                                  data-target-id="${item.title}-${subMenu.title}"
+                                  data-sly-element="${subMenu.href && 'a' @ context='unsafe'}"
+                                  href="${subMenu.href}"
+                                  class="Header__SubMenuHeading">
+                            <span>${subMenu.title}</span>
+                            <!-- <i class="iconfont-chevron-down" aria-hidden="true" data-sly-test="${!menuItem.href}"></i> -->
+                          </button>
+                        </li>
+
+                        <!-- Second Leavel Expanding the thirdlevel items in the second level  -->
+                        <sly class="Header__SubMenuList" data-sly-list.subMenuItem="${subMenu.children}">
+                          <li class="Header__SubMenuItem">
+                            <a x-cq-linkchecker="valid" class="Header__SubMenuLink" href="${subMenuItem.href}">
+                              <span>${subMenuItem.title}</span>
+                            </a>
+                          </li>
+                        </sly>
+                      </sly>
+                    </sly>
+
+                    <!-- <sly data-sly-list.subMenu="${item.menus}">
+                      <sly data-sly-test="${subMenu.tileButton}">
+                        <div class="promo-tile-container">
+                          <div class="promo-tile-image">
+                            <img src="${subMenu.tileImage}"></img>
+                          </div>
+                          <div class="promo-tile-title">
+                            ${subMenu.title}
+                          </div>
+                          <div class="promo-tile-description">
+                            ${subMenu.tileDescription}
+                          </div>
+                          <div class="promo-tile-button">
+                            <a class="promo-button" href=${subMenu.tileHref}>${subMenu.tilebuttonDescription}</a>
+                          </div>
+                        </div>
+                      </sly>
+                    </sly> -->
+
+                  </ul>
+                </sly>
+                
+                <sly data-sly-list="${menu.drawers}">
+                  <sly data-sly-list.subMenu="${item.menus}">
+                    <sly data-sly-test="${subMenu.tileButton}">
+                      <div class="promo-tile-container">
+                        <div class="promo-tile-image">
+                          <img src="${subMenu.tileImage}"></img>
+                        </div>
+                        <div class="promo-tile-title">
+                          ${subMenu.title}
+                        </div>
+                        <div class="promo-tile-description">
+                          ${subMenu.tileDescription}
+                        </div>
+                        <div class="promo-tile-button">
+                          <a class="promo-button" style="text-decoration: none !important;" href=${subMenu.tileHref}>${subMenu.tilebuttonDescription}</a>
+                        </div>
+                      </div>
+                      <br>
+                    </sly>
+                  </sly>
+                </sly>
+
+              </div>
+              <!-- END second level -->
+
+              <!-- START third level -->
+              <!-- <sly data-sly-list="${menu.drawers}">
+                <sly data-sly-list.subMenu="${item.menus}">
+                  <div class="Header__SubMenu" data-id="${item.title}-${subMenu.title}" data-level="2" data-active="false">
+                    <div class="Header__SubMenuBack">
+                      <button data-cmp-hook-header="mobileMenuBack">
+                        <i class="iconfont-chevron-down" aria-hidden="true"></i>
+                        <span>${subMenu.title || 'Back'}</span>
+                      </button>
+                    </div>
+
+                    <ul class="Header__SubMenuList" data-sly-list.subMenuItem="${subMenu.children}">
+                      <li class="Header__SubMenuItem">
+                        <a x-cq-linkchecker="valid" class="Header__SubMenuLink" href="${subMenuItem.href}">
+                          <span>${subMenuItem.title}</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </sly>
+              </sly>-->
+              <!-- END third level -->
+            </div>
+          </sly>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="Header__SearchContainer">
+      <div class="Header__SearchInput">
+        <form action="${model.searchPath || 'https://www.cfs.com.au/personal/search-personal.html'}" method="GET">
+          <label aria-label="Search"><span class="visually-hidden">${model.searchLabel}</span>
+            <input type="search" name="query" placeholder="Search" data-cmp-hook-header="searchInput">
+          </label>
+        </form>
+      </div>
+      <div class="Header__SearchDrawer">
+        <h2>Suggested Search</h2>
+        <div class="Header_SearchSuggestion">
+          <div class="Header__SearchDrawerSection">
+            <span class="Header__SearchDrawerTitle">${model.popularLabel}</span>
+            <ul data-sly-list.popularLink="${model.popularLinks}">
+              <li>
+                <a x-cq-linkchecker="valid" href="${popularLink.href}">${popularLink.label}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="Header__SearchDrawerSection">
+            <span class="Header__SearchDrawerTitle">${model.quickLinksLabel}</span>
+            <ul data-sly-list.quickLink="${model.quickLinks}">
+              <li>
+                <a x-cq-linkchecker="valid" href="${quickLink.href}">${quickLink.label}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="Header__Search">
+      <button class="Header__SearchIcon Header__SearchIconOpen" data-cmp-hook-header="searchOpen">
+        <span class="visually-hidden">Search now</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <mask id="mask0_2161_39014" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+            <rect width="24" height="24" fill="#D9D9D9"/>
+          </mask>
+          <g mask="url(#mask0_2161_39014)">
+            <path d="M9.53937 15.2311C7.94065 15.2311 6.58584 14.6756 5.47494 13.5647C4.36404 12.4538 3.80859 11.099 3.80859 9.50031C3.80859 7.90159 4.36404 6.54678 5.47494 5.43588C6.58584 4.32498 7.94065 3.76953 9.53937 3.76953C11.1381 3.76953 12.4929 4.32498 13.6038 5.43588C14.7147 6.54678 15.2701 7.90159 15.2701 9.50031C15.2701 10.1952 15.1471 10.8676 14.9009 11.5176C14.6548 12.1676 14.3317 12.7234 13.9317 13.1849L19.8394 19.0926C19.933 19.1862 19.983 19.301 19.9894 19.4369C19.9958 19.5727 19.9458 19.6939 19.8394 19.8003C19.733 19.9067 19.615 19.9599 19.4855 19.9599C19.356 19.9599 19.2381 19.9067 19.1317 19.8003L13.224 13.8926C12.724 14.3183 12.149 14.6477 11.499 14.8811C10.849 15.1144 10.1958 15.2311 9.53937 15.2311ZM9.53937 14.2311C10.8663 14.2311 11.9865 13.7743 12.8999 12.8609C13.8134 11.9474 14.2701 10.8272 14.2701 9.50031C14.2701 8.17339 13.8134 7.0532 12.8999 6.13973C11.9865 5.22627 10.8663 4.76953 9.53937 4.76953C8.21245 4.76953 7.09226 5.22627 6.17879 6.13973C5.26534 7.0532 4.80862 8.17339 4.80862 9.50031C4.80862 10.8272 5.26534 11.9474 6.17879 12.8609C7.09226 13.7743 8.21245 14.2311 9.53937 14.2311Z" fill="#1C1B1F"/>
+          </g>
+        </svg>
+      </button>
+
+      <button class="Header__SearchClear" data-cmp-hook-header="searchClear">
+        <span class="visually-hidden">Close search</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M6 18L18 6" stroke="black" stroke-linecap="round"/>
+          <path d="M6 6L18 18" stroke="black" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button class="Header__SearchExecute" data-cmp-hook-header="searchExecute">
+        <span class="visually-hidden">Search now</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <mask id="mask0_2161_39014" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+            <rect width="24" height="24" fill="#D9D9D9"/>
+          </mask>
+          <g mask="url(#mask0_2161_39014)">
+            <path d="M9.53937 15.2311C7.94065 15.2311 6.58584 14.6756 5.47494 13.5647C4.36404 12.4538 3.80859 11.099 3.80859 9.50031C3.80859 7.90159 4.36404 6.54678 5.47494 5.43588C6.58584 4.32498 7.94065 3.76953 9.53937 3.76953C11.1381 3.76953 12.4929 4.32498 13.6038 5.43588C14.7147 6.54678 15.2701 7.90159 15.2701 9.50031C15.2701 10.1952 15.1471 10.8676 14.9009 11.5176C14.6548 12.1676 14.3317 12.7234 13.9317 13.1849L19.8394 19.0926C19.933 19.1862 19.983 19.301 19.9894 19.4369C19.9958 19.5727 19.9458 19.6939 19.8394 19.8003C19.733 19.9067 19.615 19.9599 19.4855 19.9599C19.356 19.9599 19.2381 19.9067 19.1317 19.8003L13.224 13.8926C12.724 14.3183 12.149 14.6477 11.499 14.8811C10.849 15.1144 10.1958 15.2311 9.53937 15.2311ZM9.53937 14.2311C10.8663 14.2311 11.9865 13.7743 12.8999 12.8609C13.8134 11.9474 14.2701 10.8272 14.2701 9.50031C14.2701 8.17339 13.8134 7.0532 12.8999 6.13973C11.9865 5.22627 10.8663 4.76953 9.53937 4.76953C8.21245 4.76953 7.09226 5.22627 6.17879 6.13973C5.26534 7.0532 4.80862 8.17339 4.80862 9.50031C4.80862 10.8272 5.26534 11.9474 6.17879 12.8609C7.09226 13.7743 8.21245 14.2311 9.53937 14.2311Z" fill="#1C1B1F"/>
+          </g>
+        </svg>
+      </button>
+
+      <button class="Header__SearchIcon Header__SearchIconClose" data-cmp-hook-header="searchClose">
+        <span>${model.searchCancelLabel}</span>
+      </button>
+      <ul class="Header__PrimaryMenuList_Right">
+        <li
+                class="Header__PrimaryMenuItem"
+                data-cmp-hook-header="megamenuItem"
+                data-active="false"
+                data-has-children="${model.loginItems && model.loginItems.size > 0 ? 'true' : 'false'}"
+        >
+          <div class="Header__PrimaryMenuButton">
+            <button
+                    x-cq-linkchecker="valid"
+                    data-cmp-hook-header="megamenuOpen"
+                    data-target-id="${model.loginTitle}"
+            >
+              <span>${model.loginTitle}</span>
+              <i class="iconfont-chevron-down" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="Header__Drawer">
+            <div class="Header__DrawerContainer">
+              <div class="Header__DrawerWrapper">
+                <div class="Header__DrawerMenuContainer Header__DrawerMenuContainer--column">
+                  <nav class="Header__DrawerMenu" aria-label="${drawerMenu.title}">
+                    <h2 class="Header__DrawerMenuHeading">${model.loginMenuTitle}</h2>
+                    <ul class="Header__DrawerMenuList" data-sly-list.loginItem="${model.loginItems}">
+                      <li class="Header__DrawerMenuItem">
+                        <a x-cq-linkchecker="valid" class="Header__DrawerMenuLink" href="${loginItem.linkLogin @ context='unsafe'}">${loginItem.loginLabel}</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <sly data-sly-test="${!model.hideNavigationButton}">
+          <li>
+            <div class="Header__PrimaryMenuButton">
+              <a href="${model.buttonLink}" role="button" class="Button Button--theme-black Button--type-solid">
+              <span class="Button__Label">
+                ${model.buttonTitle}
+              </span>
+              </a>
+            </div>
+          </li>
+        </sly>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+<div class="Header__Backdrop" data-cmp-hook-header="backdrop"></div>
+</div>
+</header>
