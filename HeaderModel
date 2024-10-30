@@ -150,12 +150,14 @@ public class HeaderModel {
         Resource navItemsL3 = navItemL2.getChild("navItemsLevel3");
         List<NavigationItem> itemsL3 = processNavigationItemsL3(navItemsL3);
 
-        String title = navItemL2.getValueMap().get(ApplicationConstants.TITLE,String.class);
-		
-		  String tileButton = navItemL2.getValueMap().get(ApplicationConstants.TILE_BUTTON,String.class);
-      String tileDescription = navItemL2.getValueMap().get(ApplicationConstants.TILE_DESCRIPTION,String.class);
-          String tilebuttonDescription = navItemL2.getValueMap().get(ApplicationConstants.TILE_BUTTON_DESCRIPTION,String.class);
-		  String tileImage = navItemL2.getValueMap().get(ApplicationConstants.TILE_IMAGE,String.class);
+         
+		    String title = navItemL2.getValueMap().get(ApplicationConstants.TITLE, String.class);
+            String tileButton = navItemL2.getValueMap().get(ApplicationConstants.TILE_BUTTON, String.class);
+            String tileDescription = navItemL2.getValueMap().get(ApplicationConstants.TILE_DESCRIPTION, String.class);
+            String tilebuttonDescription = navItemL2.getValueMap().get(ApplicationConstants.TILE_BUTTON_DESCRIPTION, String.class);
+            String tileImage = navItemL2.getValueMap().get(ApplicationConstants.TILE_IMAGE, String.class);
+            String trackingName = navItemL2.getValueMap().get(ApplicationConstants.TRACKING_NAME, String.class);
+
 		  
         String href = LinkUtil.getMappedURL(
             navItemL2.getValueMap().get(ApplicationConstants.HREF, String.class),
@@ -167,7 +169,7 @@ public class HeaderModel {
             navItemL2.getResourceResolver()
         );
 
-        NavigationItem navigationItemL2 = new NavigationItem(title, StringUtils.EMPTY, StringUtils.EMPTY, href, tileButton, tileHref, tileDescription, tilebuttonDescription, tileImage, itemsL3, navItemL2.getResourceResolver());
+        NavigationItem navigationItemL2 = new NavigationItem(title, StringUtils.EMPTY, StringUtils.EMPTY, href, tileButton, tileHref, tileDescription, tilebuttonDescription, tileImage, itemsL3, navItemL2.getResourceResolver(),trackingName);
         itemsL2.add(navigationItemL2);
       }
     }
