@@ -1,0 +1,114 @@
+
+package au.com.cfs.winged.core.models.pojo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.sling.api.resource.ResourceResolver;
+
+import au.com.cfs.winged.helpers.LinkUtil;
+
+
+public class NavigationItem {
+
+    private String title;
+
+    private String mobileTitle;
+
+    private String href;
+
+    private String icon;
+
+    private String hideButton;
+	
+	private String tileButton;
+
+    private String tileHref;
+
+    private String tileDescription;
+
+    private String tilebuttonDescription;
+
+    private String tileImage;
+
+    private List<NavigationItem> nextLevelItems = new ArrayList<>();
+
+    private List<Drawer> drawers = new ArrayList<>();
+
+    public NavigationItem(String title, String hideButton, String mobileTitle, String href, String tileButton, String tileHref, String tileDescription, String tilebuttonDescription,  String tileImage, List<NavigationItem> nextLevelItems, ResourceResolver resourceResolver) {
+        this.title = title;
+        this.hideButton = hideButton;
+        this.mobileTitle = mobileTitle;
+		 this.tileButton = tileButton;
+    
+        this.tileDescription = tileDescription;
+		 this.tilebuttonDescription = tilebuttonDescription;
+        this.tileImage = tileImage;
+    
+        this.href = LinkUtil.getMappedURL(
+          href,
+          resourceResolver
+        );
+		 this.tileHref = LinkUtil.getMappedURL(
+          tileHref,
+          resourceResolver
+        );
+        this.nextLevelItems = nextLevelItems;
+
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getHideButton() {
+        return hideButton;
+    }
+
+    public String getMobileTitle() {
+        return mobileTitle;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public List<NavigationItem> getChildren() {
+        return nextLevelItems;
+    }
+
+    public List<Drawer> getDrawers() {
+        return drawers;
+    }
+
+    public void setDrawers(List<Drawer> drawers) {
+        this.drawers = drawers;
+    }
+	
+    public String getTileHref() {
+        return tileHref;
+    }
+
+    public String getTileButton() {
+        return tileButton;
+    }
+
+    public String getTileDescription() {
+        return tileDescription;
+    }
+	  public String getTilebuttonDescription() {
+        return tilebuttonDescription;
+    }
+
+    public String getTileImage() {
+        return tileImage;
+    }
+}
