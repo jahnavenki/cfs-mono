@@ -1,4 +1,3 @@
-
 package au.com.cfs.winged.core.models.pojo;
 
 import java.util.ArrayList;
@@ -8,53 +7,38 @@ import org.apache.sling.api.resource.ResourceResolver;
 
 import au.com.cfs.winged.helpers.LinkUtil;
 
-
 public class NavigationItem {
 
     private String title;
-
     private String mobileTitle;
-
     private String href;
-
     private String icon;
-
     private String hideButton;
-	
-	private String tileButton;
-
+    private String tileButton;
     private String tileHref;
-
     private String tileDescription;
-
     private String tilebuttonDescription;
-
     private String tileImage;
+    private String trackingName; // New field
 
     private List<NavigationItem> nextLevelItems = new ArrayList<>();
-
     private List<Drawer> drawers = new ArrayList<>();
 
-    public NavigationItem(String title, String hideButton, String mobileTitle, String href, String tileButton, String tileHref, String tileDescription, String tilebuttonDescription,  String tileImage, List<NavigationItem> nextLevelItems, ResourceResolver resourceResolver) {
+    public NavigationItem(String title, String hideButton, String mobileTitle, String href, String tileButton,
+                          String tileHref, String tileDescription, String tilebuttonDescription, String tileImage,
+                          String trackingName, List<NavigationItem> nextLevelItems, ResourceResolver resourceResolver) {
         this.title = title;
         this.hideButton = hideButton;
         this.mobileTitle = mobileTitle;
-		 this.tileButton = tileButton;
-    
+        this.tileButton = tileButton;
         this.tileDescription = tileDescription;
-		 this.tilebuttonDescription = tilebuttonDescription;
+        this.tilebuttonDescription = tilebuttonDescription;
         this.tileImage = tileImage;
-    
-        this.href = LinkUtil.getMappedURL(
-          href,
-          resourceResolver
-        );
-		 this.tileHref = LinkUtil.getMappedURL(
-          tileHref,
-          resourceResolver
-        );
-        this.nextLevelItems = nextLevelItems;
+        this.trackingName = trackingName; // Initialize new field
 
+        this.href = LinkUtil.getMappedURL(href, resourceResolver);
+        this.tileHref = LinkUtil.getMappedURL(tileHref, resourceResolver);
+        this.nextLevelItems = nextLevelItems;
     }
 
     public String getTitle() {
@@ -92,7 +76,7 @@ public class NavigationItem {
     public void setDrawers(List<Drawer> drawers) {
         this.drawers = drawers;
     }
-	
+
     public String getTileHref() {
         return tileHref;
     }
@@ -104,11 +88,16 @@ public class NavigationItem {
     public String getTileDescription() {
         return tileDescription;
     }
-	  public String getTilebuttonDescription() {
+
+    public String getTilebuttonDescription() {
         return tilebuttonDescription;
     }
 
     public String getTileImage() {
         return tileImage;
     }
+
+    public String getTrackingName() {
+        return trackingName;
+    } // Getter for trackingName
 }
