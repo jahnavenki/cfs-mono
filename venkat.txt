@@ -1,13 +1,30 @@
-<script>
-      !function(e,a,n,t){
-        var i=e.head;if(i){
-          if (a) return;
-          var o=e.createElement("style");
-          o.id="alloy-prehiding",
-          o.innerText="body { opacity: 0 !important } " + n,
-          i.appendChild(o),
-          setTimeout(function(){o.parentNode&&o.parentNode.removeChild(o)},t)
-        }
-      }
-      (document, document.location.href.indexOf("adobe_authoring_enabled") !== -1, ".personalization-container { opacity: 0 !important }", 3000);
-    </script>
+Step 1: Verify Site Ownership
+Go to Google Search Console: Google Search Console.
+Click Start Now and sign in with your Google account.
+Add your non-production domain (e.g., https://preview-p110482-e1080534.adobeaemcloud.com) to Search Console by clicking Add Property.
+Select the URL Prefix method.
+Follow one of these verification methods:
+Download HTML File:
+Download the HTML verification file provided.
+Upload it to the root directory of the non-production domain using AEM or dispatcher access.
+Verify ownership in Search Console.
+Alternative Methods:
+Use a meta tag in the <head> section of your preview site's HTML.
+Add a TXT record to your DNS settings.
+Use Google Tag Manager to add the verification code.
+Step 2: Submit Removal Request
+After verifying ownership, navigate to Google Search Console > Index > Removals.
+Click on New Request.
+Select Temporary Removal.
+Enter the non-production domain URL (or use a wildcard for all URLs under the domain, e.g., https://preview-p110482-e1080534.adobeaemcloud.com/*).
+Submit the request.
+Step 3: Prevent Future Indexing
+To prevent the domain from being indexed again:
+
+Add a robots.txt file to disallow all bots:
+makefile
+Copy code
+User-agent: *
+Disallow: /
+Ensure that non-production environments have proper authentication or IP whitelisting to block unauthorized access.
+Verify that no non-prod links are shared externally.
