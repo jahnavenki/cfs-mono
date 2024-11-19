@@ -28,3 +28,63 @@ User-agent: *
 Disallow: /
 Ensure that non-production environments have proper authentication or IP whitelisting to block unauthorized access.
 Verify that no non-prod links are shared externally.
+.......................................
+# /robots.txt file for https://www3.colonialfirststate.com.au/
+
+###All bots
+User-agent: *
+
+Allow: /content/dam/colonial-first-state/sitemap*
+
+#Preview URLs
+Disallow : /
+
+#Files
+Disallow: /content/dam/colonial-first-state/images*
+Disallow: /content/dam/colonial-first-state/docs*
+Disallow: /content/dam/colonial-first-state/forms*
+Disallow: /test/
+
+#CMS
+Disallow: /Devx*
+Disallow: /personal/campaigns/supermatch.html
+Disallow: /content/external-content*
+Disallow: /content/dam/wm/cfs-dashboard/reports*
+Disallow: /content/shared/firstnet/*
+
+#Disallow edge learning page
+Disallow:/adviser/platform-adviser/resources/cfs-edge-learning.html
+
+#Disallow You've unsubscribed
+Disallow: /content/cfs-winged/au/en/personal/frc-unsubscribe.html
+
+##First Tech
+Disallow: /content/cfs-winged/au/en/firsttech/*
+Disallow: /firsttech/*
+
+###SiteImprove Bot
+User-agent: 93.160.60.22
+
+Allow: /content/dam/colonial-first-state/sitemap*
+Allow: /test/
+
+#Files
+Disallow: /content/dam/colonial-first-state/images*
+Disallow: /content/dam/colonial-first-state/docs*
+Disallow: /content/dam/colonial-first-state/forms*
+
+
+#CMS
+Disallow: /Devx*
+Disallow: /content/external-content*
+Disallow: /content/dam/wm/cfs-dashboard/reports*
+Disallow: /content/shared/firstnet/*
+
+
+#FNA Help
+Disallow: /content/cfs-winged/au/en/firstnet-help/adviser*
+Disallow: https://help.colonialfirststate.com.au/adviser/*
+
+
+
+Sitemap: http://www3.colonialfirststate.com.au/sitemap.xml
