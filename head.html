@@ -1,0 +1,65 @@
+<template data-sly-template.head="${ @ page }"
+          data-sly-use.headlibRenderer="headlibs.html"
+          data-sly-use.headResources="head.resources.html">
+                 
+    <meta charset="UTF-8">
+    <title>${page.title}</title>
+	<sly data-sly-test="${currentPage.properties['hideInNav']}">
+        <meta name="robots" content="noindex">
+    </sly>
+    <meta data-sly-test.keywords="${properties['keywords']}" name="keywords" content="${keywords}"/>    
+    <meta data-sly-test.description="${properties['jcr:description']}" name="description" content="${description}"/>    
+    <meta data-sly-test.ogTitle="${properties['ogTitle']}" property="og:title" content="${ogTitle}"/>
+    <meta data-sly-test.ogUrl="${properties['ogUrl']}" property="og:url" content="${ogUrl}"/>
+    <meta data-sly-test.ogType="${properties['ogType']}" property="og:type" content="${ogType}"/>
+    <meta data-sly-test.ogSite_name="${properties['ogSite_name']}" property="og:site_name" content="${ogSite_name}"/>
+    <meta data-sly-test.ogImage="${properties['ogImage']}" property="og:image" content="${ogImage}"/>                   
+    <meta data-sly-test.templateName="${page.templateName}" name="template" content="${templateName}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta data-sly-test.analyticsPageName="${properties['analyticsPageName']}" name="pageName" content="${analyticsPageName}"/>
+    <meta name="google-site-verification" content="5DYFnvL9C23cSJbQQ-gTmvQv0trez039_OXloR35SBk" />
+    
+     <meta data-sly-test.headingh="${properties['headingh']}" property="heading(H1)" content="${headingh}"/>
+     <meta data-sly-test.url="${properties['url']}" property="url" content="${url}"/>
+     <meta data-sly-test.productType="${properties['productType']}" property="product-type" content="${productType}"/>
+	 <meta data-sly-test.canonicalUrl="${properties['canonicalUrl']}" property="canonical-url" content="${canonicalUrl}"/>
+     <meta data-sly-test.imageUrl="${properties['imageUrl']}" property="image-url" content="${imageUrl}"/>
+     <meta data-sly-test.imageAltText="${properties['imageAltText']}" property="image-alt-text" content="${imageAltText}"/>
+     <meta property="date-published" content="${pageProperties.jcr:created.time}"/>
+     <meta property="date-modified" content="${pageProperties.cq:lastModified.time}"/>
+     <meta data-sly-test.readingTime="${properties['readingTime']}" property="reading-time" content="${readingTime}"/>
+     <meta data-sly-test.internalSearch="${properties['internalSearch']}" property="internal-site-search-url" content="${internalSearch}"/>
+     <meta data-sly-test.publisher="${properties['publisher']}" property="publisher" content="${publisher}"/>
+     <meta data-sly-test.logoUrl="${properties['logoUrl']}" property="logo-url" content="${logoUrl}"/>
+     <meta data-sly-test.phone="${properties['phone']}" property="Phone" content="${phone}"/>
+     <meta data-sly-test.facebookUrl="${properties['facebookUrl']}" property="facebook-url" content="${facebookUrl}"/>
+     <meta data-sly-test.twitterUrl="${properties['twitterUrl']}" property="twitter-url" content="${twitterUrl}"/>
+     <meta data-sly-test.linkedinUrl="${properties['linkedinUrl']}" property="linkedin-url" content="${linkedinUrl}"/>
+     <meta data-sly-test.youtubeUrl="${properties['youtubeUrl']}" property="youtube-url" content="${youtubeUrl}"/>
+     <meta data-sly-test.companyName="${properties['companyName']}" property="company-name" content="${companyName}"/>
+
+    
+
+	<sly data-sly-include="customheaderlibs.html"></sly>
+    <sly data-sly-call="${headlibRenderer.headlibs @
+                                designPath                = page.designPath,
+                                staticDesignPath          = page.staticDesignPath,
+                                clientLibCategories       = page.clientLibCategories,
+                                clientLibCategoriesJsHead = page.clientLibCategoriesJsHead,
+                                hasCloudconfigSupport     = page.hasCloudconfigSupport}"></sly>
+    <sly data-sly-test.appResourcesPath=${page.appResourcesPath} data-sly-call="${headResources.favicons @ path = appResourcesPath}"></sly>
+
+    <style data-sly-test.pageStyling="${properties['pageStyling']}" name="pageStyling">${ pageStyling @ context='unsafe' }</style>
+	<sly data-sly-test="${page.templateName == 'home-page'}">
+    <script data-sly-include='schemaforhomepage.html' type="application/ld+json">
+    </script>
+   </sly>
+   <sly data-sly-test="${page.templateName == 'content-page'}">
+    <script data-sly-include='schemaforcontentpage.html' type="application/ld+json">
+    </script>
+   </sly>
+  <sly data-sly-test="${page.templateName == 'adviser-page' || page.templateName == 'employer-page' || page.templateName == 'base-page' || page.templateName == 'search-page'}">
+   <script data-sly-include='schemaforother.html' type="application/ld+json">
+    </script>
+</sly> 
+</template>
