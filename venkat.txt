@@ -1,62 +1,380 @@
-Step 1: Verify Site Ownership
-Go to Google Search Console: Google Search Console.
-Click Start Now and sign in with your Google account.
-Add your non-production domain (e.g., https://preview-p110482-e1080534.adobeaemcloud.com) to Search Console by clicking Add Property.
-Select the URL Prefix method.
-Follow one of these verification methods:
-Download HTML File:
-Download the HTML verification file provided.
-Upload it to the root directory of the non-production domain using AEM or dispatcher access.
-Verify ownership in Search Console.
-Alternative Methods:
-Use a meta tag in the <head> section of your preview site's HTML.
-Add a TXT record to your DNS settings.
-Use Google Tag Manager to add the verification code.
-Step 2: Submit Removal Request
-After verifying ownership, navigate to Google Search Console > Index > Removals.
-Click on New Request.
-Select Temporary Removal.
-Enter the non-production domain URL (or use a wildcard for all URLs under the domain, e.g., https://preview-p110482-e1080534.adobeaemcloud.com/*).
-Submit the request.
-Step 3: Prevent Future Indexing
-To prevent the domain from being indexed again:
+<style>
+    html, body {
+        background: #192b4b;
+    }
+    .slick-slide,.slick-list,.slick-track {
+        width: 100%!important;
+        height: auto!important;
+    }
+    .cfs-faq .faq-tile {
+        min-height: 150px;
+    }
+    .cfs-faq {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+    .Disclaimer__Panel, .Disclaimer__Button, header, footer, .spacer.aem-GridColumn, .new.newpar { 
+        display: none; opacity: 0; visibility: hidden;
+    }
+</style>
 
-Add a robots.txt file to disallow all bots:
-makefile
-Copy code
-User-agent: *
-Disallow: /
-Ensure that non-production environments have proper authentication or IP whitelisting to block unauthorized access.
-Verify that no non-prod links are shared externally.
-.......................................
-# Robots.txt for Non-Production Environment
+<main ng-controller="main-controller" class="ng-scope">
+    
+    
+    	<div>
 
-# Block all bots from crawling the site
-User-agent: *
-Disallow: /
+<header>
+        <div class="header-with-tabs-container" style="background-image: url(&#39;&#39;)">
+          <div class="container"> 
+            <div class="header-text-container row">
+              <div class="col-sm-8">
+                
+                <ul class="breadcrumb">
+                	<li><a href="../../Firsttech-App.html" tabindex="0">Home</a></li>
+                </ul>
+                
+                <h1 tabindex="0">Super Topics</h1>
+              </div>
+            </div>
+            <div class="row">
+              <nav>
+                <ul class="header-tabs bg2-tabs">
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="active">
+                      
+                          <a href="Super-Accumulation-Caps-Thresholds.html" data-tracker-locationid="cfs | tabbedheader-super conts caps &amp; thresholds" tabindex="0">Super Conts Caps &amp; Thresholds</a></li>
+                
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="true">
+                      
+                          <a href="Total-superannuation-balance.html" data-tracker-locationid="cfs | tabbedheader-total super balance" tabindex="0">Total Super Balance</a></li>
+                
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="true">
+                      
+                          <a href="Transfer-balance-cap.html" data-tracker-locationid="cfs | tabbedheader-transfer balance cap" tabindex="0">Transfer Balance Cap</a></li>
+                
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="true">
+                      
+                          <a href="Pre-retirement-income-streams.html" data-tracker-locationid="cfs | tabbedheader-transition to retirement income streams" tabindex="0">Transition To Retirement Income Streams</a></li>
+                
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="true">
+                      
+                          <a href="Retirement-phase-income-streams.html" data-tracker-locationid="cfs | tabbedheader-retirement phase income streams" tabindex="0">Retirement Phase Income Streams</a></li>
+                
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="true">
+                      
+                          <a href="Taxation-of-super-benefits.html" data-tracker-locationid="cfs | tabbedheader-taxation of super benefits" tabindex="0">Taxation Of Super Benefits</a></li>
+                
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="true">
+                      
+                          <a href="Self-managed-superannuation-funds.html" data-tracker-locationid="cfs | tabbedheader-self-managed super funds (smsfs)" tabindex="0">Self-Managed Super Funds (SMSFs)</a></li>
+                
+                  <span class="span-icons icon-cfs-chevron-down"></span>
+                  <li class="true">
+                      
+                          <a href="preservation-age.html" data-tracker-locationid="cfs | tabbedheader-preservation age" tabindex="0">Preservation Age</a></li>
+                </ul>
+              </nav>   
+               
+            </div>
+          </div>
+        </div>
+</header></div>
+    
+    
+<div><div class="cfs_zone section">
 
-# Allow only sitemap for specific use
-Allow: /content/dam/colonial-first-state/sitemap*
 
-# Block specific directories and files
-Disallow: /content/dam/colonial-first-state/images*
-Disallow: /content/dam/colonial-first-state/docs*
-Disallow: /content/dam/colonial-first-state/forms*
-Disallow: /test/
-Disallow: /Devx*
-Disallow: /personal/campaigns/supermatch.html
-Disallow: /content/external-content*
-Disallow: /content/dam/wm/cfs-dashboard/reports*
-Disallow: /content/shared/firstnet/*
-Disallow: /adviser/platform-adviser/resources/cfs-edge-learning.html
-Disallow: /content/cfs-winged/au/en/personal/frc-unsubscribe.html
-Disallow: /content/cfs-winged/au/en/firsttech/*
-Disallow: /firsttech/*
 
-# Block specific help pages
-Disallow: /content/cfs-winged/au/en/firstnet-help/adviser*
-Disallow: https://help.colonialfirststate.com.au/adviser/*
 
-# Sitemap location
-Sitemap: http://www3.colonialfirststate.com.au/sitemap.xml
+<section class="bg3  cls-nopad cls-nomargin">
+	
+		<div class="container">
+	
+	<div class="cfs_faq parbase section">
 
+
+<div data-cfs-faq="data-cfs-faq" class="cfs-faq-container cls-nopad ">
+	
+	<div class="carousel-arrow-container">
+		<div class="container">
+			  
+		</div>
+	</div>
+	<div class="container">
+		<div class="cfs-faq slick-initialized slick-slider"><div class="slick-list draggable" style="height: 182px;"><div class="slick-track" style="opacity: 1; width: 1100px; transform: translate3d(0px, 0px, 0px);"><div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 1100px;"><div><a href="Super-Accumulation-Caps-Thresholds/Contribution-caps-summary.html" class="faq-tile" style="width: 25%; display: inline-block; height: 172px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">Cont Caps Summary</h4>
+				</div>
+				
+			</a><a href="Super-Accumulation-Caps-Thresholds/Non-concessional-contributions.html" class="faq-tile" style="width: 25%; display: inline-block; height: 172px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">Non-Conc Conts (NCC)</h4>
+				</div>
+				
+			</a></div></div></div></div></div>
+	</div>
+	<div class="carousel-marker-container"></div>
+</div></div>
+<div class="cfs_faq parbase section">
+
+
+<div data-cfs-faq="data-cfs-faq" class="cfs-faq-container cls-nopad ">
+	
+	<div class="carousel-arrow-container">
+		<div class="container">
+			  
+		</div>
+	</div>
+	<div class="container">
+		<div class="cfs-faq slick-initialized slick-slider"><div class="slick-list draggable" style="height: 152px;"><div class="slick-track" style="opacity: 1; width: 1100px; transform: translate3d(0px, 0px, 0px);"><div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 1100px;"><div><a href="Super-Accumulation-Caps-Thresholds/Concessional-contributions.html" class="faq-tile" style="width: 25%; display: inline-block; height: 142px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">Conc Conts</h4>
+				</div>
+				
+			</a><a href="Super-Accumulation-Caps-Thresholds/CGT-cap-amounts.html" class="faq-tile" style="width: 25%; display: inline-block; height: 142px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">CGT lifetime cap</h4>
+				</div>
+				
+			</a></div></div></div></div></div>
+	</div>
+	<div class="carousel-marker-container"></div>
+</div></div>
+<div class="cfs_faq parbase section">
+
+
+<div data-cfs-faq="data-cfs-faq" class="cfs-faq-container cls-nopad ">
+	
+	<div class="carousel-arrow-container">
+		<div class="container">
+			  
+		</div>
+	</div>
+	<div class="container">
+		<div class="cfs-faq slick-initialized slick-slider"><div class="slick-list draggable" style="height: 182px;"><div class="slick-track" style="opacity: 1; width: 1100px; transform: translate3d(0px, 0px, 0px);"><div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 1100px;"><div><a href="Super-Accumulation-Caps-Thresholds/Government-contributions.html" class="faq-tile" style="width: 25%; display: inline-block; height: 172px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">Government Co-Conts</h4>
+				</div>
+				
+			</a><a href="Super-Accumulation-Caps-Thresholds/Low-income-superannuation-tax-offset.html" class="faq-tile" style="width: 25%; display: inline-block; height: 172px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">LISTO</h4>
+				</div>
+				
+			</a></div></div></div></div></div>
+	</div>
+	<div class="carousel-marker-container"></div>
+</div></div>
+<div class="cfs_faq parbase section">
+
+
+<div data-cfs-faq="data-cfs-faq" class="cfs-faq-container cls-nopad ">
+	
+	<div class="carousel-arrow-container">
+		<div class="container">
+			  
+		</div>
+	</div>
+	<div class="container">
+		<div class="cfs-faq slick-initialized slick-slider"><div class="slick-list draggable" style="height: 182px;"><div class="slick-track" style="opacity: 1; width: 1100px; transform: translate3d(0px, 0px, 0px);"><div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 1100px;"><div><a href="Super-Accumulation-Caps-Thresholds/Superannuation-guarantee.html" class="faq-tile" style="width: 25%; display: inline-block; height: 172px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">Super Guarantee (SG)</h4>
+				</div>
+				
+			</a><a href="Super-Accumulation-Caps-Thresholds/housing-related-contributions.html" class="faq-tile" style="width: 25%; display: inline-block; height: 172px;" tabindex="0">
+				<div class="content">
+					<span class="red-tag"></span>
+					<h4 tabindex="0">Housing related contributions</h4>
+				</div>
+				
+			</a></div></div></div></div></div>
+	</div>
+	<div class="carousel-marker-container"></div>
+</div></div>
+<div class="cfs_columncontrol section btns-in-row">
+
+<div class="cls-nopad ">
+	
+        
+
+        
+
+        
+
+        
+    
+      
+        
+     
+       <div class="row" data-cfs-equal-height-tile-container="{tileClass: &#39;.tile&#39;}">
+<div class="fourcolumn  col-md-3 col-xs-12 col-sm-3">
+	
+
+</div>
+<div class="fourcolumn col-md-3 col-xs-12 col-sm-3">
+    
+	
+</div>
+<div class="fourcolumn  col-md-3 col-xs-12 col-sm-3">
+    
+	
+</div>
+<div class="fourcolumn  col-md-3 col-xs-12 col-sm-3">
+    <div class="cfs_button parbase section">
+
+<div class="row text-center cls-nopad ">
+    
+        <a href="../Superannuation.html" target="_self" tabindex="0">
+            
+                <button class="btn-default" aria-label="Super" tabindex="0">
+                    <span class="icon-cfs-home span-icons"> </span><span>Super</span>
+                </button>
+            
+            
+            
+            
+            
+            
+        </a>
+    
+</div>
+</div>
+
+	
+</div>
+</div>
+    
+</div></div>
+
+
+	
+		</div>
+	
+</section>
+
+</div>
+
+</div>
+<!-- Footer Section -->
+<!-- Header Section -->
+ 
+	<div><div class="section"><div class="new"></div>
+</div><div class="iparys_inherited"><div class="contactuspar iparsys parsys"></div>
+</div>
+</div>
+
+<!-- Paragraph Section -->
+
+	<div><div class="section"><div class="new"></div>
+</div><div class="iparys_inherited"><div class="footerpar iparsys parsys"><div class="cfs_zone section">
+
+
+
+
+<section class="bg-cfs-blue  cls-nopad cls-nomargin">
+	
+		<div class="container">
+	
+	
+
+	
+		</div>
+	
+</section>
+
+</div>
+</div>
+</div>
+</div>
+    
+		<div class="flash-message-container"><div class="section"><div class="new"></div>
+</div><div class="iparys_inherited"><div class="sitealertpar iparsys parsys"></div>
+</div>
+</div>
+	
+
+</main>
+................................................................................
+<!--/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ Copyright 2021 Adobe
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/-->
+<!DOCTYPE HTML>
+<html data-sly-use.page="com.adobe.cq.wcm.core.components.models.Page" lang="${page.language}"
+      data-sly-use.pwa="com.adobe.cq.wcm.core.components.models.PWA"
+      data-sly-use.head="head.html"
+      data-sly-use.footer="footer.html"
+      data-sly-use.redirect="redirect.html"
+	  ng-app="cfs-app">
+<head data-sly-call="${head.head @ page = page, pwa = pwa}"></head>
+<body class="${page.cssClassNames}"
+      id="${page.id}"
+      data-cmp-data-layer-enabled="${page.data ? true : false}">
+<script data-sly-test.dataLayerEnabled="${page.data}">
+          window.adobeDataLayer = window.adobeDataLayer || [];
+          adobeDataLayer.push({
+              page: JSON.parse("${page.data.json @ context='scriptString'}"),
+              event:'cmp:show',
+              eventInfo: {
+                  path: 'page.${page.id @ context="scriptString"}'
+              }
+          });
+        </script>
+<sly data-sly-test.isRedirectPage="${page.redirectTarget && (wcmmode.edit || wcmmode.preview)}"
+     data-sly-call="${redirect.redirect @ redirectTarget = page.redirectTarget}"></sly>
+<sly data-sly-test="${!isRedirectPage}">
+  <sly data-sly-include="body.skiptomaincontent.html"></sly>
+  <sly data-sly-include="body.html"></sly>
+  <sly data-sly-call="${footer.footer @ page = page, pwa = pwa}"></sly>
+</sly>
+</body>
+</html>
+.......................................................................
+
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
+    <sly data-sly-call="${clientlib.css @ categories='cfs-winged.site'}"/>
+    <sly data-sly-call="${clientlib.css @ categories='cfs-winged.legacy'}"/>
+</sly>
+
+<sly data-sly-resource="${'contexthub' @ resourceType='granite/contexthub/components/contexthub'}"/>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/content/dam/cfs-winged/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/content/dam/cfs-winged/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/content/dam/cfs-winged/favicon/favicon-16x16.png">
+<link rel="manifest" href="/content/dam/cfs-winged/favicon/site.webmanifest">
+<link rel="mask-icon" href="/content/dam/cfs-winged/favicon/safari-pinned-tab.svg" color="#164a9a">
+<meta name="msapplication-TileColor" content="#148c8c">
+<meta name="theme-color" content="#164a9a">
+
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html">
+  <sly data-sly-call="${clientlib.js @ categories='cfs-winged.legacy'}" />
+</sly>
+................................................
+Firsttech-App.html:448 Refused to apply style from 'https://www.cfs.com.au/style.css' because its MIME type ('text/html') is not a supported stylesheet MIME type, and strict MIME checking is enabled.Understand this errorAI
+Firsttech-App.html:1 Mixed Content: The page at 'https://www.cfs.com.au/Firsttech-App.html' was loaded over HTTPS, but requested an insecure script 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'. This request has been blocked; the content must be served over HTTPS.Understand this errorAI
+clientlib-site.lc-b55a45538d52daec538c65d4d7cb9d79-lc.min.js:2 
+https://www.cfs.com.au/Firsttech-App.html
