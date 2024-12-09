@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured">
+    <format
+        jcr:primaryType="nt:unstructured"
+        features="bold,italic,underline"/>
+    <justify
+        jcr:primaryType="nt:unstructured"
+        features="*"/>
+    <links
+        jcr:primaryType="nt:unstructured"
+        features="modifylink,unlink,anchor"/>
+    <lists
+        jcr:primaryType="nt:unstructured"
+        features="*"/>
+    <misctools jcr:primaryType="nt:unstructured">
+        <specialCharsConfig jcr:primaryType="nt:unstructured">
+            <chars jcr:primaryType="nt:unstructured">
+                <default_copyright
+                    jcr:primaryType="nt:unstructured"
+                    entity="&amp;copy;"
+                    name="copyright"/>
+                <default_euro
+                    jcr:primaryType="nt:unstructured"
+                    entity="&amp;euro;"
+                    name="euro"/>
+                <default_registered
+                    jcr:primaryType="nt:unstructured"
+                    entity="&amp;reg;"
+                    name="registered"/>
+                <default_trademark
+                    jcr:primaryType="nt:unstructured"
+                    entity="&amp;trade;"
+                    name="trademark"/>
+            </chars>
+        </specialCharsConfig>
+    </misctools>
+    <paraformat
+        jcr:primaryType="nt:unstructured"
+        features="*">
+        <formats jcr:primaryType="nt:unstructured">
+            <default_p
+                jcr:primaryType="nt:unstructured"
+                description="Paragraph"
+                tag="p"/>
+            <default_h1
+                jcr:primaryType="nt:unstructured"
+                description="Heading 1"
+                tag="h1"/>
+            <default_h2
+                    jcr:primaryType="nt:unstructured"
+                    description="Heading 2"
+                    tag="h2"/>
+            <default_h3
+                    jcr:primaryType="nt:unstructured"
+                    description="Heading 3"
+                    tag="h3"/>
+            <default_h4
+                    jcr:primaryType="nt:unstructured"
+                    description="Heading 4"
+                    tag="h4"/>
+            <default_h5
+                    jcr:primaryType="nt:unstructured"
+                    description="Heading 5"
+                    tag="h5"/>
+            <default_h6
+                    jcr:primaryType="nt:unstructured"
+                    description="Heading 6"
+                    tag="h6"/>
+        </formats>
+    </paraformat>
+    <table
+        jcr:primaryType="nt:unstructured"
+        features="-">
+        <hiddenHeaderConfig
+            jcr:primaryType="nt:unstructured"
+            hiddenHeaderClassName="cq-wcm-foundation-aria-visuallyhidden"
+            hiddenHeaderEditingCSS="cq-RichText-hiddenHeader--editing"/>
+    </table>
+    <tracklinks
+        jcr:primaryType="nt:unstructured"
+        features="*"/>
+</jcr:root>
