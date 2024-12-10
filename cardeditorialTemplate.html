@@ -1,0 +1,75 @@
+<template data-sly-template.card="${@ model, disableParsys}">
+  <sly data-sly-set.hasMetadata="${model.metadata && (model.metadata.readingTime || model.metadata.date)}" />
+  <sly data-sly-set.hasVideo="${model.videoUrl && model.mediaType == 'video'}" />
+  <sly data-sly-set.hasImage="${model.imageUrl && model.mediaType == 'image'}" />
+  <sly data-sly-set.hasIcon="${model.iconUrl && model.mediaType == 'icon'}" />
+  
+  <div
+    data-cmp-is="cardEditorial"
+    data-sly-test="${model.heading}"
+    class="
+      CardEditorial
+      CardEditorial--layout-${model.layout || 'vertical'}
+      CardEditorial--image-height-${model.imageHeight || 'small'}
+      ${hasImage ? 'CardEditorial--media-image' : ''}
+      ${hasVideo ? 'CardEditorial--media-video' : ''}
+      ${hasMetadata ? 'CardEditorial--with-metadata' : ''}
+    " 
+  >
+  
+    <div class="CardEditorial__Media" data-sly-test="${hasVideo || hasImage}">
+      <div class="CardEditorial__Image" data-sly-test="${hasImage}">
+        <img src="${model.imageUrl}" alt="" />
+      </div>
+      
+      <video 
+        data-sly-test="${hasVideo}"
+        src="${model.videoUrl}"
+        muted
+        loop
+        controls
+        playsinline
+      ></video>
+    </div>
+  
+    <div class="CardEditorial__Container ${model.horizontalLine && 'horizondalLine'} ${model.verticalLine && 'verticalLine'}">
+      <div class="CardEditorial__Content">
+        <div class="CardEditorial__Icon" data-sly-test="${hasIcon}">
+          <img src="${model.iconUrl}" alt="" />
+        </div>
+  
+        <h3 class="CardEditorial__Heading h4" data-sly-test="${model.heading}">
+          <a x-cq-linkchecker="valid" class="CardEditorial__HeadingLink" href="${model.headingLink @ context='unsafe'}" data-sly-unwrap="${!model.headingLink @ context='unsafe'}">
+            <span>${model.heading}</span>
+            <i class="iconfont-chevron-down-right" aria-hidden="true" data-sly-test="${model.headingLink}"></i>
+          </a>
+        </h3>
+  
+        <div class="CardEditorial__Metadata">
+          <span class="CardEditorial__Tag Tag--type-primary Tag" data-sly-test="${model.metadata && model.metadata.tag}">
+            ${model.metadata.tag}
+          </span>
+  
+          <span class="CardEditorial__Date colour--grey-2" data-sly-test="${model.metadata && model.metadata.date}">
+            ${model.metadata.date}
+          </span>
+    
+          <span class="CardEditorial__ReadingTime colour--grey-2" data-sly-test="${model.metadata && model.metadata.readingTime}">
+            ${model.metadata.readingTime}
+          </span>
+        </div>
+  
+        <div
+          class="CardEditorial__Description p2"
+          data-sly-test="${model.description}"
+        >
+          ${model.description @ context='html'}
+        </div>
+  
+        <div class="CardEditorial__Parsys" data-sly-test="${!disableParsys}">
+          <sly data-sly-resource="${'par' @ resourceType='foundation/components/parsys'}" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
