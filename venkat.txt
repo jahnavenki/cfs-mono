@@ -192,3 +192,14 @@ html {
   transition: margin .3s;
 }
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+ol, ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+////////////////////////////////////////////////
+<div class="CardEditorial__Description p2">
+          <ul><li>Venkat</li><li>Venkat</li><li>Venkat</li></ul>
+<p>&nbsp;</p>
+
+        </div>
