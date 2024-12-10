@@ -1,0 +1,8 @@
+<sly data-sly-use.templates="core/wcm/components/commons/v1/templates.html" />
+<sly data-sly-use.model="au.com.cfs.winged.core.models.CardEditorialModel" />
+<sly data-sly-use.buttonTemp="/apps/cfs-winged/components/content/button/buttonTemp.html" />
+<sly data-sly-use.cardEditorialTemplate="cardeditorialTemplate.html" />
+
+<sly data-sly-call="${cardEditorialTemplate.card @ model=model}" />
+
+<sly data-sly-call="${templates.placeholder @ isEmpty = !model.heading, classAppend = ''}"></sly>
